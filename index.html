@@ -388,6 +388,101 @@ const CONTACTS = [
   { name: "Fatima Al-Rashid", company: "Zenith Capital", email: "fatima@zenithcap.com", status: "MQL", score: 51 },
 ];
 
+// ─── REPORTS DATA ─────────────────────────────────────────────
+const REPORTS_DATA = {
+  revenueAttribution: [
+    { source: "Organic Search", revenue: 284000, deals: 23, pct: 33.5, color: ACCENT_TEAL },
+    { source: "Referrals", revenue: 198000, deals: 14, pct: 23.4, color: HUBSPOT_ORANGE },
+    { source: "Paid Ads", revenue: 142000, deals: 18, pct: 16.8, color: ACCENT_BLUE },
+    { source: "Direct Traffic", revenue: 96000, deals: 11, pct: 11.3, color: "#A78BFA" },
+    { source: "Social Media", revenue: 67000, deals: 9, pct: 7.9, color: "#F59E0B" },
+    { source: "Email Campaigns", revenue: 34000, deals: 7, pct: 4.0, color: HUBSPOT_CORAL },
+    { source: "Events/Conferences", revenue: 26000, deals: 4, pct: 3.1, color: "#22C55E" },
+  ],
+  salesLeaderboard: [
+    { name: "Sarah Chen", role: "Sr. Account Executive", closed: 18, revenue: "$412K", quota: 92, winRate: 34.2, avgDealSize: "$22.9K", pipeline: "$680K", activities: 147, avatar: "SC", trend: [28,35,41,38,52,48,62] },
+    { name: "James Park", role: "Account Executive", closed: 14, revenue: "$287K", quota: 78, winRate: 28.6, avgDealSize: "$20.5K", pipeline: "$520K", activities: 132, avatar: "JP", trend: [22,28,32,35,30,38,42] },
+    { name: "Lisa Wong", role: "Enterprise AE", closed: 11, revenue: "$356K", quota: 85, winRate: 31.4, avgDealSize: "$32.4K", pipeline: "$890K", activities: 98, avatar: "LW", trend: [30,25,38,42,35,48,55] },
+    { name: "Amir Khan", role: "Account Executive", closed: 9, revenue: "$178K", quota: 64, winRate: 22.5, avgDealSize: "$19.8K", pipeline: "$340K", activities: 165, avatar: "AK", trend: [18,22,20,25,28,24,30] },
+  ],
+  pipelineVelocity: {
+    avgDaysToClose: 47,
+    avgDealSize: "$23.4K",
+    winRate: "14.2%",
+    pipelineValue: "$4.8M",
+    forecastedRevenue: "$1.2M",
+    quarterlyTarget: "$1.5M",
+    attainment: 78.3,
+    stageVelocity: [
+      { stage: "Awareness → Consideration", avgDays: 8.2, conversion: "61.7%" },
+      { stage: "Consideration → Decision", avgDays: 12.5, conversion: "54.3%" },
+      { stage: "Decision → Negotiation", avgDays: 9.8, conversion: "54.9%" },
+      { stage: "Negotiation → Closed Won", avgDays: 16.5, conversion: "57.1%" },
+    ],
+    monthlyForecast: [
+      { month: "Mar 2026", projected: 320, actual: 298, confidence: "High" },
+      { month: "Apr 2026", projected: 380, actual: null, confidence: "Medium" },
+      { month: "May 2026", projected: 420, actual: null, confidence: "Low" },
+    ],
+  },
+  emailPerformance: {
+    totalSent: 45892,
+    delivered: 44756,
+    opened: 19243,
+    clicked: 4012,
+    bounced: 1136,
+    unsubscribed: 89,
+    openRate: "43.0%",
+    clickRate: "8.9%",
+    bounceRate: "2.5%",
+    unsubRate: "0.19%",
+    topCampaigns: [
+      { name: "Q1 Product Launch", sent: 8400, openRate: "52.3%", clickRate: "12.8%", revenue: "$34K", status: "completed" },
+      { name: "Nurture — MQL Sequence", sent: 12430, openRate: "41.2%", clickRate: "7.4%", revenue: "$89K", status: "active" },
+      { name: "Re-engagement Series", sent: 5200, openRate: "28.7%", clickRate: "4.2%", revenue: "$12K", status: "active" },
+      { name: "Monthly Newsletter — Mar", sent: 18200, openRate: "38.9%", clickRate: "6.1%", revenue: "$8K", status: "completed" },
+      { name: "Webinar Invite — AI Summit", sent: 3400, openRate: "48.6%", clickRate: "18.2%", revenue: "$45K", status: "scheduled" },
+    ],
+    dailyData: [
+      { day: "Mon", sent: 1240, opens: 534 }, { day: "Tue", sent: 1890, opens: 812 },
+      { day: "Wed", sent: 1650, opens: 710 }, { day: "Thu", sent: 2100, opens: 903 },
+      { day: "Fri", sent: 1420, opens: 611 }, { day: "Sat", sent: 340, opens: 146 },
+      { day: "Sun", sent: 210, opens: 90 },
+    ],
+  },
+  activityReport: {
+    totalActivities: 2847,
+    calls: { count: 423, avgDuration: "18 min", connected: 312, voicemails: 111 },
+    emails: { count: 1456, sent: 892, received: 564, avgResponseTime: "2.4 hrs" },
+    meetings: { count: 234, scheduled: 256, noShows: 22, avgDuration: "34 min" },
+    tasks: { count: 567, completed: 489, overdue: 34, avgCompletionTime: "1.8 days" },
+    notes: { count: 167 },
+    weeklyTrend: [
+      { week: "W1", calls: 98, emails: 340, meetings: 52, tasks: 134 },
+      { week: "W2", calls: 112, emails: 378, meetings: 61, tasks: 148 },
+      { week: "W3", calls: 105, emails: 362, meetings: 58, tasks: 142 },
+      { week: "W4", calls: 108, emails: 376, meetings: 63, tasks: 143 },
+    ],
+  },
+  channelROI: [
+    { channel: "Google Ads", spend: "$12,400", leads: 435, cpl: "$28.50", deals: 18, revenue: "$142K", roas: "11.5x" },
+    { channel: "LinkedIn Ads", spend: "$8,200", leads: 187, cpl: "$43.85", deals: 12, revenue: "$98K", roas: "12.0x" },
+    { channel: "Facebook Ads", spend: "$4,600", leads: 312, cpl: "$14.74", deals: 6, revenue: "$28K", roas: "6.1x" },
+    { channel: "Content/SEO", spend: "$6,800", leads: 623, cpl: "$10.92", deals: 23, revenue: "$284K", roas: "41.8x" },
+    { channel: "Events", spend: "$15,200", leads: 89, cpl: "$170.79", deals: 4, revenue: "$210K", roas: "13.8x" },
+    { channel: "Email Marketing", spend: "$1,200", leads: 234, cpl: "$5.13", deals: 7, revenue: "$34K", roas: "28.3x" },
+  ],
+};
+
+const REPORT_CATEGORIES = [
+  { id: "revenue", name: "Revenue Attribution", icon: "💰", desc: "Track revenue sources, deal attribution, and ROI across all channels", color: ACCENT_TEAL, count: "7 sources" },
+  { id: "sales", name: "Sales Performance", icon: "🏆", desc: "Rep leaderboard, quota attainment, win rates, and activity metrics", color: HUBSPOT_ORANGE, count: "4 reps" },
+  { id: "pipeline", name: "Pipeline & Forecast", icon: "📈", desc: "Pipeline velocity, stage conversion, deal aging, and revenue forecasting", color: ACCENT_BLUE, count: "Q1 2026" },
+  { id: "email", name: "Email Analytics", icon: "✉️", desc: "Campaign performance, deliverability, engagement rates, and A/B results", color: "#A78BFA", count: "5 campaigns" },
+  { id: "activity", name: "Activity Reports", icon: "📊", desc: "Team activity breakdown — calls, emails, meetings, tasks, and trends", color: "#F59E0B", count: "2,847 total" },
+  { id: "roi", name: "Channel ROI", icon: "🎯", desc: "Marketing spend efficiency, cost per lead, and return on ad spend by channel", color: HUBSPOT_CORAL, count: "6 channels" },
+];
+
 // ─── RESPONSIVE HOOK ─────────────────────────────────────────────
 function useResponsive() {
   const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
@@ -503,6 +598,7 @@ const NAV_ITEMS = [
   { key:"hubs", label:"Hubs", icon:"⬡" },
   { key:"workflows", label:"Workflows", icon:"⟐" },
   { key:"integrations", label:"Integrations", icon:"⊞" },
+  { key:"reports", label:"Reports", icon:"◧" },
   { key:"contacts", label:"Contacts", icon:"◎" },
 ];
 
@@ -915,6 +1011,570 @@ function HubDetailView({ hub, onBack, isMobile }) {
   );
 }
 
+// ─── DONUT CHART ────────────────────────────────────────────
+function DonutChart({ data, size = 180 }) {
+  const total = data.reduce((s, d) => s + d.pct, 0);
+  let cumAngle = -90;
+  const r = size / 2, innerR = r * 0.62, cx = r, cy = r;
+  const arcs = data.map(d => {
+    const angle = (d.pct / total) * 360;
+    const startAngle = cumAngle;
+    cumAngle += angle;
+    const endAngle = cumAngle;
+    const startRad = (startAngle * Math.PI) / 180;
+    const endRad = (endAngle * Math.PI) / 180;
+    const largeArc = angle > 180 ? 1 : 0;
+    const x1 = cx + r * Math.cos(startRad), y1 = cy + r * Math.sin(startRad);
+    const x2 = cx + r * Math.cos(endRad), y2 = cy + r * Math.sin(endRad);
+    const ix1 = cx + innerR * Math.cos(startRad), iy1 = cy + innerR * Math.sin(startRad);
+    const ix2 = cx + innerR * Math.cos(endRad), iy2 = cy + innerR * Math.sin(endRad);
+    const path = `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} L ${ix2} ${iy2} A ${innerR} ${innerR} 0 ${largeArc} 0 ${ix1} ${iy1} Z`;
+    return { ...d, path };
+  });
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {arcs.map((a, i) => <path key={i} d={a.path} fill={a.color} opacity="0.85" stroke={BG_DARK} strokeWidth="2"/>)}
+      <circle cx={cx} cy={cy} r={innerR - 4} fill="none"/>
+    </svg>
+  );
+}
+
+// ─── MINI AREA CHART ────────────────────────────────────────
+function AreaChart({ data, color = HUBSPOT_ORANGE, width = 200, height = 50, label }) {
+  const max = Math.max(...data); const min = Math.min(...data); const range = max - min || 1;
+  const pts = data.map((v,i) => `${(i/(data.length-1))*width},${height - ((v-min)/range)*height}`).join(" ");
+  const gid = `area-${color.replace("#","")}-${Math.random().toString(36).slice(2,6)}`;
+  return (
+    <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
+      <defs><linearGradient id={gid} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={color} stopOpacity="0.4"/><stop offset="100%" stopColor={color} stopOpacity="0.02"/></linearGradient></defs>
+      <polygon points={`0,${height} ${pts} ${width},${height}`} fill={`url(#${gid})`}/>
+      <polyline points={pts} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+// ─── HORIZONTAL BAR ─────────────────────────────────────────
+function HorizBar({ value, max, color, height = 8 }) {
+  return (
+    <div style={{height,background:"rgba(255,255,255,0.06)",borderRadius:height/2,overflow:"hidden",flex:1}}>
+      <div style={{width:`${(value/max)*100}%`,height:"100%",background:`linear-gradient(90deg,${color},${color}aa)`,borderRadius:height/2,boxShadow:`0 0 8px ${color}30`,transition:"width 0.8s ease"}}/>
+    </div>
+  );
+}
+
+// ─── REPORT DETAIL: REVENUE ATTRIBUTION ─────────────────────
+function RevenueAttributionReport({ onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const data = REPORTS_DATA.revenueAttribution;
+  const totalRevenue = data.reduce((s,d) => s + d.revenue, 0);
+  const totalDeals = data.reduce((s,d) => s + d.deals, 0);
+  const maxRev = Math.max(...data.map(d => d.revenue));
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to reports" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${ACCENT_TEAL},${ACCENT_BLUE})`}}/>
+        <div style={{paddingTop:8}}>
+          <div style={{fontSize:isMobile?20:26,fontWeight:800,color:"#fff"}}>Revenue Attribution</div>
+          <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>Breakdown of closed revenue by original lead source · Q1 2026</div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Total Revenue",value:`$${(totalRevenue/1000).toFixed(0)}K`,color:ACCENT_TEAL},
+          {label:"Total Deals",value:totalDeals.toString(),color:HUBSPOT_ORANGE},
+          {label:"Avg Deal Size",value:`$${(totalRevenue/totalDeals/1000).toFixed(1)}K`,color:ACCENT_BLUE},
+          {label:"Top Source",value:"Organic",color:"#22C55E"},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:isMobile?20:26,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:16,marginBottom:20}}>
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:20}}>Revenue by Source</div>
+          <div style={{display:"flex",justifyContent:"center",marginBottom:20}}>
+            <DonutChart data={data} size={isMobile?160:200}/>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            {data.map((d,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"center",gap:8,fontSize:12}}>
+                <div style={{width:10,height:10,borderRadius:3,background:d.color,flexShrink:0}}/>
+                <span style={{color:"#94a3b8",flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{d.source}</span>
+                <span style={{color:"#fff",fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{d.pct}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Revenue Breakdown</div>
+          {data.map((d,i)=>(
+            <div key={i} style={{marginBottom:14}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,fontSize:12}}>
+                <span style={{color:"#E2E8F0",fontWeight:600}}>{d.source}</span>
+                <span style={{color:"#94a3b8",fontFamily:"'JetBrains Mono', monospace"}}>${(d.revenue/1000).toFixed(0)}K · {d.deals} deals</span>
+              </div>
+              <HorizBar value={d.revenue} max={maxRev} color={d.color}/>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── REPORT DETAIL: SALES PERFORMANCE ───────────────────────
+function SalesPerformanceReport({ onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const reps = REPORTS_DATA.salesLeaderboard;
+  const [expandedRep, setExpandedRep] = useState(null);
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to reports" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`}}/>
+        <div style={{paddingTop:8}}>
+          <div style={{fontSize:isMobile?20:26,fontWeight:800,color:"#fff"}}>Sales Performance</div>
+          <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>Rep leaderboard, quota attainment, and activity metrics · Q1 2026</div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Total Closed",value:"52",color:ACCENT_TEAL},
+          {label:"Team Revenue",value:"$1.23M",color:HUBSPOT_ORANGE},
+          {label:"Avg Win Rate",value:"29.2%",color:ACCENT_BLUE},
+          {label:"Quota Attainment",value:"79.8%",color:"#A78BFA"},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:isMobile?20:26,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {reps.map((rep,i)=>(
+        <div key={i} onClick={()=>setExpandedRep(expandedRep===i?null:i)} style={{...crd,marginBottom:12,cursor:"pointer",borderColor:expandedRep===i?`${HUBSPOT_ORANGE}40`:"rgba(255,255,255,0.06)",boxShadow:expandedRep===i?`0 0 20px ${HUBSPOT_ORANGE}10`:"none",transition:"all 0.3s"}}>
+          <div style={{display:"flex",alignItems:"center",gap:16,flexWrap:"wrap"}}>
+            <div style={{display:"flex",alignItems:"center",gap:3,minWidth:28}}>
+              <span style={{fontSize:20,fontWeight:800,color:i===0?"#FFD700":i===1?"#C0C0C0":i===2?"#CD7F32":"#64748b",fontFamily:"'JetBrains Mono', monospace"}}>#{i+1}</span>
+            </div>
+            <div style={{width:44,height:44,borderRadius:"50%",background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:700,color:"#fff",flexShrink:0}}>{rep.avatar}</div>
+            <div style={{flex:1,minWidth:120}}>
+              <div style={{fontSize:15,fontWeight:700,color:"#fff"}}>{rep.name}</div>
+              <div style={{fontSize:11,color:"#64748b",marginTop:2}}>{rep.role}</div>
+            </div>
+            <div style={{display:"flex",gap:isMobile?12:24,flexWrap:"wrap",alignItems:"center"}}>
+              <div style={{textAlign:"center"}}><div style={{fontSize:16,fontWeight:800,color:"#fff",fontFamily:"'JetBrains Mono', monospace"}}>{rep.revenue}</div><div style={{fontSize:10,color:"#64748b"}}>REVENUE</div></div>
+              <div style={{textAlign:"center"}}><div style={{fontSize:16,fontWeight:800,color:ACCENT_TEAL,fontFamily:"'JetBrains Mono', monospace"}}>{rep.closed}</div><div style={{fontSize:10,color:"#64748b"}}>CLOSED</div></div>
+              <div style={{textAlign:"center",minWidth:60}}>
+                <div style={{fontSize:16,fontWeight:800,color:rep.quota>=80?"#22C55E":rep.quota>=60?HUBSPOT_ORANGE:"#EF4444",fontFamily:"'JetBrains Mono', monospace"}}>{rep.quota}%</div>
+                <div style={{fontSize:10,color:"#64748b"}}>QUOTA</div>
+              </div>
+              <div style={{width:80}}><AreaChart data={rep.trend} color={HUBSPOT_ORANGE} height={30}/></div>
+            </div>
+          </div>
+
+          {expandedRep===i && (
+            <div style={{marginTop:20,paddingTop:16,borderTop:"1px solid rgba(255,255,255,0.06)",animation:"fadeSlideIn 0.3s ease"}}>
+              <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(5,1fr)",gap:12}}>
+                {[
+                  {label:"Win Rate",value:`${rep.winRate}%`,color:ACCENT_TEAL},
+                  {label:"Avg Deal Size",value:rep.avgDealSize,color:ACCENT_BLUE},
+                  {label:"Pipeline Value",value:rep.pipeline,color:HUBSPOT_ORANGE},
+                  {label:"Activities",value:rep.activities.toString(),color:"#A78BFA"},
+                  {label:"Deals Closed",value:rep.closed.toString(),color:"#22C55E"},
+                ].map((s,j)=>(
+                  <div key={j} style={{padding:"12px",background:"rgba(255,255,255,0.03)",borderRadius:10,textAlign:"center",border:"1px solid rgba(255,255,255,0.04)"}}>
+                    <div style={{fontSize:18,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+                    <div style={{fontSize:10,color:"#64748b",marginTop:4,textTransform:"uppercase"}}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{marginTop:16,padding:"12px 16px",background:"rgba(255,255,255,0.03)",borderRadius:10,border:"1px solid rgba(255,255,255,0.04)"}}>
+                <div style={{fontSize:12,color:"#64748b",marginBottom:8}}>Quota Progress</div>
+                <div style={{height:12,background:"rgba(255,255,255,0.06)",borderRadius:6,overflow:"hidden",position:"relative"}}>
+                  <div style={{width:`${rep.quota}%`,height:"100%",background:`linear-gradient(90deg,${rep.quota>=80?"#22C55E":rep.quota>=60?HUBSPOT_ORANGE:"#EF4444"},${rep.quota>=80?"#22C55E":rep.quota>=60?HUBSPOT_ORANGE:"#EF4444"}aa)`,borderRadius:6,transition:"width 1s"}}/>
+                  <div style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",fontSize:10,fontWeight:700,color:"#fff"}}>{rep.quota}% of target</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── REPORT DETAIL: PIPELINE & FORECAST ─────────────────────
+function PipelineForecastReport({ onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const pv = REPORTS_DATA.pipelineVelocity;
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to reports" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${ACCENT_BLUE},${ACCENT_TEAL})`}}/>
+        <div style={{paddingTop:8}}>
+          <div style={{fontSize:isMobile?20:26,fontWeight:800,color:"#fff"}}>Pipeline & Forecast</div>
+          <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>Deal velocity, stage conversion rates, and revenue forecasting · Q1 2026</div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Avg Days to Close",value:`${pv.avgDaysToClose}`,color:ACCENT_BLUE},
+          {label:"Pipeline Value",value:pv.pipelineValue,color:ACCENT_TEAL},
+          {label:"Forecasted Rev",value:pv.forecastedRevenue,color:HUBSPOT_ORANGE},
+          {label:"Q1 Attainment",value:`${pv.attainment}%`,color:pv.attainment>=80?"#22C55E":"#F59E0B"},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:isMobile?20:26,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:16,marginBottom:20}}>
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:20}}>Stage Velocity</div>
+          {pv.stageVelocity.map((sv,i)=>(
+            <div key={i} style={{padding:"14px 16px",background:GLASS,borderRadius:10,marginBottom:10,border:"1px solid rgba(255,255,255,0.04)"}}>
+              <div style={{fontSize:13,fontWeight:600,color:"#E2E8F0",marginBottom:8}}>{sv.stage}</div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <div style={{display:"flex",gap:16}}>
+                  <div style={{fontSize:12}}><span style={{color:"#64748b"}}>Avg: </span><span style={{color:ACCENT_BLUE,fontWeight:700,fontFamily:"'JetBrains Mono', monospace"}}>{sv.avgDays}d</span></div>
+                  <div style={{fontSize:12}}><span style={{color:"#64748b"}}>Conv: </span><span style={{color:ACCENT_TEAL,fontWeight:700,fontFamily:"'JetBrains Mono', monospace"}}>{sv.conversion}</span></div>
+                </div>
+                <HorizBar value={parseFloat(sv.conversion)} max={100} color={ACCENT_TEAL} height={6}/>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:20}}>Revenue Forecast</div>
+          
+          <div style={{marginBottom:20}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:8}}>
+              <span style={{color:"#64748b"}}>Q1 Target</span>
+              <span style={{color:"#E2E8F0",fontWeight:600}}>{pv.quarterlyTarget}</span>
+            </div>
+            <div style={{height:16,background:"rgba(255,255,255,0.06)",borderRadius:8,overflow:"hidden",position:"relative"}}>
+              <div style={{width:`${pv.attainment}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT_TEAL},${HUBSPOT_ORANGE})`,borderRadius:8,transition:"width 1s"}}/>
+              <div style={{position:"absolute",left:"50%",top:"50%",transform:"translate(-50%,-50%)",fontSize:10,fontWeight:700,color:"#fff"}}>{pv.attainment}%</div>
+            </div>
+          </div>
+          
+          {pv.monthlyForecast.map((mf,i)=>(
+            <div key={i} style={{padding:"14px 16px",background:GLASS,borderRadius:10,marginBottom:10,border:"1px solid rgba(255,255,255,0.04)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                <span style={{fontSize:13,fontWeight:600,color:"#E2E8F0"}}>{mf.month}</span>
+                <span style={{padding:"2px 10px",borderRadius:20,fontSize:10,fontWeight:600,
+                  background:mf.confidence==="High"?"rgba(34,197,94,0.12)":mf.confidence==="Medium"?"rgba(245,158,11,0.12)":"rgba(239,68,68,0.12)",
+                  color:mf.confidence==="High"?"#22C55E":mf.confidence==="Medium"?"#F59E0B":"#EF4444",
+                  border:`1px solid ${mf.confidence==="High"?"#22C55E30":mf.confidence==="Medium"?"#F59E0B30":"#EF444430"}`
+                }}>{mf.confidence}</span>
+              </div>
+              <div style={{display:"flex",gap:16,fontSize:12}}>
+                <span><span style={{color:"#64748b"}}>Projected: </span><span style={{color:HUBSPOT_ORANGE,fontWeight:700,fontFamily:"'JetBrains Mono', monospace"}}>${mf.projected}K</span></span>
+                {mf.actual && <span><span style={{color:"#64748b"}}>Actual: </span><span style={{color:ACCENT_TEAL,fontWeight:700,fontFamily:"'JetBrains Mono', monospace"}}>${mf.actual}K</span></span>}
+              </div>
+            </div>
+          ))}
+
+          <div style={{marginTop:16,padding:"14px",background:"rgba(0,145,174,0.08)",borderRadius:10,border:"1px solid rgba(0,145,174,0.15)"}}>
+            <div style={{fontSize:12,color:ACCENT_BLUE,fontWeight:600}}>Key Metrics</div>
+            <div style={{fontSize:11,color:"#94a3b8",marginTop:6,lineHeight:1.8}}>
+              Avg Deal Size: {pv.avgDealSize} · Win Rate: {pv.winRate} · Pipeline: {pv.pipelineValue}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── REPORT DETAIL: EMAIL ANALYTICS ─────────────────────────
+function EmailAnalyticsReport({ onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const ep = REPORTS_DATA.emailPerformance;
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to reports" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,#A78BFA,${ACCENT_BLUE})`}}/>
+        <div style={{paddingTop:8}}>
+          <div style={{fontSize:isMobile?20:26,fontWeight:800,color:"#fff"}}>Email Analytics</div>
+          <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>Campaign performance, deliverability, and engagement metrics</div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Emails Sent",value:ep.totalSent.toLocaleString(),color:"#A78BFA"},
+          {label:"Open Rate",value:ep.openRate,color:ACCENT_TEAL},
+          {label:"Click Rate",value:ep.clickRate,color:HUBSPOT_ORANGE},
+          {label:"Bounce Rate",value:ep.bounceRate,color:"#EF4444"},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:isMobile?18:24,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"3fr 2fr",gap:16,marginBottom:20}}>
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:20}}>Campaign Performance</div>
+          {ep.topCampaigns.map((c,i)=>(
+            <div key={i} style={{padding:"14px 16px",background:GLASS,borderRadius:10,marginBottom:10,border:"1px solid rgba(255,255,255,0.04)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,flexWrap:"wrap",gap:8}}>
+                <div style={{fontSize:13,fontWeight:700,color:"#E2E8F0"}}>{c.name}</div>
+                <span style={{padding:"2px 10px",borderRadius:20,fontSize:10,fontWeight:600,
+                  background:c.status==="active"?"rgba(34,197,94,0.12)":c.status==="completed"?"rgba(0,145,174,0.12)":"rgba(245,158,11,0.12)",
+                  color:c.status==="active"?"#22C55E":c.status==="completed"?ACCENT_BLUE:"#F59E0B"
+                }}>{c.status}</span>
+              </div>
+              <div style={{display:"flex",gap:isMobile?10:20,fontSize:12,flexWrap:"wrap"}}>
+                {[["Sent",c.sent.toLocaleString(),"#94a3b8"],["Opens",c.openRate,ACCENT_TEAL],["Clicks",c.clickRate,HUBSPOT_ORANGE],["Revenue",c.revenue,"#22C55E"]].map(([l,v,col],j)=>(
+                  <span key={j}><span style={{color:"#64748b"}}>{l}: </span><span style={{color:col,fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{v}</span></span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <div style={{...crd,marginBottom:16}}>
+            <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Delivery Funnel</div>
+            {[
+              {label:"Sent",value:ep.totalSent,color:"#A78BFA"},
+              {label:"Delivered",value:ep.delivered,color:ACCENT_BLUE},
+              {label:"Opened",value:ep.opened,color:ACCENT_TEAL},
+              {label:"Clicked",value:ep.clicked,color:HUBSPOT_ORANGE},
+            ].map((s,i)=>(
+              <div key={i} style={{marginBottom:12}}>
+                <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:4}}>
+                  <span style={{color:"#94a3b8"}}>{s.label}</span>
+                  <span style={{color:"#fff",fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{s.value.toLocaleString()}</span>
+                </div>
+                <HorizBar value={s.value} max={ep.totalSent} color={s.color}/>
+              </div>
+            ))}
+          </div>
+
+          <div style={crd}>
+            <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Send Volume by Day</div>
+            <div style={{display:"flex",alignItems:"flex-end",gap:isMobile?4:8,height:80}}>
+              {ep.dailyData.map((d,i)=>{
+                const maxSent = Math.max(...ep.dailyData.map(x=>x.sent));
+                return (
+                  <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
+                    <div style={{width:"100%",background:`linear-gradient(180deg,${ACCENT_BLUE},${ACCENT_BLUE}66)`,borderRadius:4,height:`${(d.sent/maxSent)*60}px`,transition:"height 0.5s",minHeight:4}}/>
+                    <span style={{fontSize:9,color:"#64748b"}}>{d.day}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── REPORT DETAIL: ACTIVITY REPORTS ────────────────────────
+function ActivityReportView({ onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const ar = REPORTS_DATA.activityReport;
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to reports" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,#F59E0B,${HUBSPOT_ORANGE})`}}/>
+        <div style={{paddingTop:8}}>
+          <div style={{fontSize:isMobile?20:26,fontWeight:800,color:"#fff"}}>Activity Reports</div>
+          <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>Team activity breakdown — calls, emails, meetings, and tasks · This Month</div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(5,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Total Activities",value:ar.totalActivities.toLocaleString(),color:"#F59E0B",icon:"📊"},
+          {label:"Calls Made",value:ar.calls.count.toString(),color:ACCENT_TEAL,icon:"📞"},
+          {label:"Emails Sent",value:ar.emails.sent.toString(),color:ACCENT_BLUE,icon:"✉️"},
+          {label:"Meetings Held",value:ar.meetings.count.toString(),color:HUBSPOT_ORANGE,icon:"📅"},
+          {label:"Tasks Done",value:ar.tasks.completed.toString(),color:"#22C55E",icon:"✅"},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:18,marginBottom:4}}>{s.icon}</div>
+            <div style={{fontSize:isMobile?18:22,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:10,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:16,marginBottom:20}}>
+        {[
+          {title:"Calls",data:ar.calls,color:ACCENT_TEAL,items:[["Total Calls",ar.calls.count],["Connected",ar.calls.connected],["Voicemails",ar.calls.voicemails],["Avg Duration",ar.calls.avgDuration]]},
+          {title:"Emails",data:ar.emails,color:ACCENT_BLUE,items:[["Total Emails",ar.emails.count],["Sent",ar.emails.sent],["Received",ar.emails.received],["Avg Response",ar.emails.avgResponseTime]]},
+          {title:"Meetings",data:ar.meetings,color:HUBSPOT_ORANGE,items:[["Held",ar.meetings.count],["Scheduled",ar.meetings.scheduled],["No-Shows",ar.meetings.noShows],["Avg Duration",ar.meetings.avgDuration]]},
+          {title:"Tasks",data:ar.tasks,color:"#22C55E",items:[["Total",ar.tasks.count],["Completed",ar.tasks.completed],["Overdue",ar.tasks.overdue],["Avg Completion",ar.tasks.avgCompletionTime]]},
+        ].map((section,i)=>(
+          <div key={i} style={crd}>
+            <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>{section.title} Breakdown</div>
+            {section.items.map(([label,val],j)=>(
+              <div key={j} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:j<section.items.length-1?"1px solid rgba(255,255,255,0.04)":"none",fontSize:13}}>
+                <span style={{color:"#64748b"}}>{label}</span>
+                <span style={{color:typeof val==="number"&&label.includes("Overdue")?val>0?"#EF4444":"#22C55E":"#E2E8F0",fontWeight:600,fontFamily:typeof val==="number"?"'JetBrains Mono', monospace":"inherit"}}>{val}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <div style={crd}>
+        <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Weekly Activity Trends</div>
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(4,1fr)",gap:12}}>
+          {ar.weeklyTrend.map((w,i)=>(
+            <div key={i} style={{padding:"14px",background:GLASS,borderRadius:10,border:"1px solid rgba(255,255,255,0.04)"}}>
+              <div style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:10}}>{w.week}</div>
+              {[["Calls",w.calls,ACCENT_TEAL],["Emails",w.emails,ACCENT_BLUE],["Meetings",w.meetings,HUBSPOT_ORANGE],["Tasks",w.tasks,"#22C55E"]].map(([l,v,c],j)=>(
+                <div key={j} style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6,fontSize:12}}>
+                  <span style={{color:"#64748b"}}>{l}</span>
+                  <span style={{color:c,fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{v}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── REPORT DETAIL: CHANNEL ROI ─────────────────────────────
+function ChannelROIReport({ onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const channels = REPORTS_DATA.channelROI;
+  const maxROAS = Math.max(...channels.map(c => parseFloat(c.roas)));
+  const totalSpend = channels.reduce((s,c) => s + parseFloat(c.spend.replace(/[$,]/g,"")), 0);
+  const totalRevenue = channels.reduce((s,c) => s + parseFloat(c.revenue.replace(/[$K,]/g,""))*1000, 0);
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to reports" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${HUBSPOT_CORAL},${HUBSPOT_ORANGE})`}}/>
+        <div style={{paddingTop:8}}>
+          <div style={{fontSize:isMobile?20:26,fontWeight:800,color:"#fff"}}>Channel ROI Analysis</div>
+          <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>Marketing spend efficiency and return on investment by channel</div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Total Spend",value:`$${(totalSpend/1000).toFixed(1)}K`,color:"#EF4444"},
+          {label:"Total Revenue",value:`$${(totalRevenue/1000).toFixed(0)}K`,color:"#22C55E"},
+          {label:"Blended ROAS",value:`${(totalRevenue/totalSpend).toFixed(1)}x`,color:HUBSPOT_ORANGE},
+          {label:"Total Leads",value:channels.reduce((s,c)=>s+c.leads,0).toLocaleString(),color:ACCENT_BLUE},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:isMobile?18:24,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {isMobile ? channels.map((ch,i) => (
+        <div key={i} style={{...crd,marginBottom:12}}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:12}}>{ch.channel}</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            {[["Spend",ch.spend,"#EF4444"],["Revenue",ch.revenue,"#22C55E"],["Leads",ch.leads.toString(),ACCENT_BLUE],["CPL",ch.cpl,"#F59E0B"],["Deals",ch.deals.toString(),ACCENT_TEAL],["ROAS",ch.roas,HUBSPOT_ORANGE]].map(([l,v,c],j)=>(
+              <div key={j} style={{fontSize:12}}>
+                <span style={{color:"#64748b"}}>{l}: </span>
+                <span style={{color:c,fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{v}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{marginTop:10}}>
+            <HorizBar value={parseFloat(ch.roas)} max={maxROAS} color={HUBSPOT_ORANGE}/>
+          </div>
+        </div>
+      )) : (
+        <div style={{...crd,overflowX:"auto"}}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Channel Comparison</div>
+          <table style={{width:"100%",borderCollapse:"separate",borderSpacing:"0 4px",minWidth:700}}>
+            <thead><tr>
+              {["Channel","Spend","Leads","CPL","Deals","Revenue","ROAS"].map(h=>(
+                <th key={h} style={{textAlign:"left",padding:"8px 12px",fontSize:11,fontWeight:600,color:"#64748b",textTransform:"uppercase",letterSpacing:"0.05em"}}>{h}</th>
+              ))}
+            </tr></thead>
+            <tbody>
+              {channels.map((ch,i)=>(
+                <tr key={i}>
+                  <td style={{padding:"14px 12px",borderTop:"1px solid rgba(255,255,255,0.03)",fontSize:13,fontWeight:600,color:"#fff"}}>{ch.channel}</td>
+                  <td style={{padding:"14px 12px",borderTop:"1px solid rgba(255,255,255,0.03)",fontSize:13,color:"#EF4444",fontFamily:"'JetBrains Mono', monospace"}}>{ch.spend}</td>
+                  <td style={{padding:"14px 12px",borderTop:"1px solid rgba(255,255,255,0.03)",fontSize:13,color:ACCENT_BLUE,fontFamily:"'JetBrains Mono', monospace"}}>{ch.leads}</td>
+                  <td style={{padding:"14px 12px",borderTop:"1px solid rgba(255,255,255,0.03)",fontSize:13,color:"#F59E0B",fontFamily:"'JetBrains Mono', monospace"}}>{ch.cpl}</td>
+                  <td style={{padding:"14px 12px",borderTop:"1px solid rgba(255,255,255,0.03)",fontSize:13,color:ACCENT_TEAL,fontFamily:"'JetBrains Mono', monospace"}}>{ch.deals}</td>
+                  <td style={{padding:"14px 12px",borderTop:"1px solid rgba(255,255,255,0.03)",fontSize:13,color:"#22C55E",fontWeight:700,fontFamily:"'JetBrains Mono', monospace"}}>{ch.revenue}</td>
+                  <td style={{padding:"14px 12px",borderTop:"1px solid rgba(255,255,255,0.03)"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:8}}>
+                      <HorizBar value={parseFloat(ch.roas)} max={maxROAS} color={HUBSPOT_ORANGE} height={6}/>
+                      <span style={{fontSize:13,fontWeight:800,color:HUBSPOT_ORANGE,fontFamily:"'JetBrains Mono', monospace",whiteSpace:"nowrap"}}>{ch.roas}</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <div style={{...crd,marginTop:16}}>
+        <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:12}}>Key Insights</div>
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr 1fr",gap:12}}>
+          {[
+            {title:"Best ROAS",value:"Content/SEO — 41.8x",desc:"Organic content delivers highest return per dollar spent",color:ACCENT_TEAL},
+            {title:"Lowest CPL",value:"Email Marketing — $5.13",desc:"Most cost-efficient channel for lead generation",color:"#22C55E"},
+            {title:"Highest Revenue",value:"Content/SEO — $284K",desc:"Largest revenue contribution from a single channel",color:HUBSPOT_ORANGE},
+          ].map((ins,i)=>(
+            <div key={i} style={{padding:"14px",background:`${ins.color}08`,borderRadius:10,border:`1px solid ${ins.color}15`}}>
+              <div style={{fontSize:11,color:"#64748b",textTransform:"uppercase",letterSpacing:"0.05em",marginBottom:4}}>{ins.title}</div>
+              <div style={{fontSize:14,fontWeight:700,color:ins.color,marginBottom:4}}>{ins.value}</div>
+              <div style={{fontSize:11,color:"#94a3b8",lineHeight:1.5}}>{ins.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── CONTACT DETAIL VIEW ─────────────────────────────────────────
 function ContactDetailView({ contact, onBack, isMobile }) {
   const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
@@ -1002,6 +1662,8 @@ function HubSpotCommandCenter() {
   const [selectedHub, setSelectedHub] = useState(null);
   const [selectedContact, setSelectedContact] = useState(null);
   const [contactSearch, setContactSearch] = useState("");
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => { const t=setInterval(()=>setTime(new Date()),1000); return ()=>clearInterval(t); }, []);
   useEffect(() => {
@@ -1014,7 +1676,7 @@ function HubSpotCommandCenter() {
     setAnimIn(false);
     setTimeout(()=>{
       setActiveNav(key); setAnimIn(true);
-      setSelectedDeal(null); setSelectedWorkflow(null); setSelectedIntegration(null); setSelectedHub(null); setSelectedContact(null);
+      setSelectedDeal(null); setSelectedWorkflow(null); setSelectedIntegration(null); setSelectedHub(null); setSelectedContact(null); setSelectedReport(null);
     },200);
   }, []);
 
@@ -1026,8 +1688,8 @@ function HubSpotCommandCenter() {
   const thStyle = {textAlign:"left",padding:"8px 12px",fontSize:11,fontWeight:600,color:"#64748b",textTransform:"uppercase",letterSpacing:"0.05em"};
   const tdStyle = (h) => ({padding:"14px 12px",fontSize:13,background:h?"rgba(255,122,89,0.05)":"transparent",borderTop:"1px solid rgba(255,255,255,0.03)",cursor:"pointer"});
 
-  const TITLES = {overview:"Command Center",pipeline:"Sales Pipeline",hubs:"Hub Explorer",workflows:"Workflow Engine",integrations:"Integrations",contacts:"Contacts"};
-  const SUBS = {overview:"NexaTech Solutions — HubSpot Enterprise Implementation",pipeline:"Deal flow and revenue pipeline management",hubs:"Complete HubSpot ecosystem — all 5 hubs configured",workflows:"Automation and lifecycle management",integrations:"Third-party data sync and API connections",contacts:"Contact database and lead management"};
+  const TITLES = {overview:"Command Center",pipeline:"Sales Pipeline",hubs:"Hub Explorer",workflows:"Workflow Engine",integrations:"Integrations",reports:"Reports & Analytics",contacts:"Contacts"};
+  const SUBS = {overview:"NexaTech Solutions — HubSpot Enterprise Implementation",pipeline:"Deal flow and revenue pipeline management",hubs:"Complete HubSpot ecosystem — all 5 hubs configured",workflows:"Automation and lifecycle management",integrations:"Third-party data sync and API connections",reports:"Comprehensive reporting dashboard — revenue, sales, pipeline, email & channel ROI",contacts:"Contact database and lead management"};
 
   // ── OVERVIEW ───────────────────────────────────────────────────
   const renderOverview = () => (
@@ -1093,6 +1755,61 @@ function HubSpotCommandCenter() {
                 <div style={{minWidth:0}}><div style={{fontSize:13,fontWeight:600,color:"#fff",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{d.company}</div><div style={{fontSize:11,color:"#64748b",marginTop:2}}>{d.owner} · {d.daysInStage}d</div></div>
                 <div style={{textAlign:"right"}}><div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{d.value}</div><span style={bdg(stageColor(d.stage))}>{d.stage}</span></div>
               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* NEW ROW: Activity Feed + Quick Report Links */}
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:isMobile?12:16,marginTop:isMobile?12:16}}>
+        <div style={crd}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff"}}>Live Activity Feed</div>
+            <span style={{padding:"3px 10px",borderRadius:20,fontSize:10,fontWeight:600,background:"rgba(34,197,94,0.1)",color:"#22C55E",border:"1px solid #22C55E30"}}>● LIVE</span>
+          </div>
+          {[
+            {icon:"🎉",text:"Stratosphere AI deal closed",detail:"$210,000 — Sarah Chen","time":"2m ago",color:"#22C55E"},
+            {icon:"✉️",text:"Proposal sent to Nexora Technologies",detail:"Marcus Reynolds","time":"18m ago",color:ACCENT_BLUE},
+            {icon:"📞",text:"Discovery call completed",detail:"Horizon Dynamics — Lisa Wong","time":"32m ago",color:ACCENT_TEAL},
+            {icon:"📅",text:"Meeting scheduled with Veltrix",detail:"Diana Okafor — Apr 2","time":"1h ago",color:HUBSPOT_ORANGE},
+            {icon:"⚡",text:"3 new MQLs entered pipeline",detail:"Lead score > 50 threshold","time":"2h ago",color:"#A78BFA"},
+            {icon:"📊",text:"Weekly report generated",detail:"Q1 pipeline summary ready","time":"3h ago",color:"#F59E0B"},
+          ].map((a,i)=>(
+            <div key={i} style={{display:"flex",gap:10,padding:"8px 0",borderBottom:i<5?"1px solid rgba(255,255,255,0.03)":"none",alignItems:"flex-start"}}>
+              <span style={{fontSize:14,marginTop:1}}>{a.icon}</span>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:12,fontWeight:600,color:"#E2E8F0"}}>{a.text}</div>
+                <div style={{fontSize:11,color:"#64748b",marginTop:1}}>{a.detail}</div>
+              </div>
+              <span style={{fontSize:10,color:a.color,fontWeight:500,whiteSpace:"nowrap"}}>{a.time}</span>
+            </div>
+          ))}
+        </div>
+        <div style={crd}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff"}}>Quick Reports</div>
+            <span style={{fontSize:11,color:HUBSPOT_ORANGE,cursor:"pointer",fontWeight:600}} onClick={()=>switchNav("reports")}>All reports →</span>
+          </div>
+          {[
+            {name:"Revenue Attribution",value:"$847K",sub:"7 sources tracked",icon:"💰",color:ACCENT_TEAL,reportId:"revenue"},
+            {name:"Sales Leaderboard",value:"4 reps",sub:"Sarah Chen leads",icon:"🏆",color:HUBSPOT_ORANGE,reportId:"sales"},
+            {name:"Pipeline Forecast",value:"78.3%",sub:"Q1 attainment",icon:"📈",color:ACCENT_BLUE,reportId:"pipeline"},
+            {name:"Email Analytics",value:"43.0%",sub:"Open rate this month",icon:"✉️",color:"#A78BFA",reportId:"email"},
+          ].map((r,i)=>(
+            <div key={i} onClick={()=>{setActiveNav("reports");setSelectedReport(r.reportId);}} style={{
+              display:"flex",alignItems:"center",gap:14,padding:"12px 14px",borderRadius:10,marginBottom:8,
+              background:GLASS,border:"1px solid rgba(255,255,255,0.04)",cursor:"pointer",transition:"all 0.2s",
+            }}
+            onMouseEnter={e=>{e.currentTarget.style.borderColor=`${r.color}40`;e.currentTarget.style.background=`${r.color}06`}}
+            onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.04)";e.currentTarget.style.background=GLASS}}>
+              <div style={{width:36,height:36,borderRadius:10,background:`${r.color}12`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,border:`1px solid ${r.color}20`}}>{r.icon}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:600,color:"#fff"}}>{r.name}</div>
+                <div style={{fontSize:11,color:"#64748b"}}>{r.sub}</div>
+              </div>
+              <div style={{textAlign:"right"}}>
+                <div style={{fontSize:15,fontWeight:700,color:r.color,fontFamily:"'JetBrains Mono', monospace"}}>{r.value}</div>
+              </div>
+              <span style={{color:r.color,fontSize:12}}>→</span>
             </div>
           ))}
         </div>
@@ -1317,7 +2034,114 @@ function HubSpotCommandCenter() {
     );
   };
 
-  const SECTIONS = {overview:renderOverview,pipeline:renderPipeline,hubs:renderHubs,workflows:renderWorkflows,integrations:renderIntegrations,contacts:renderContacts};
+  // ── REPORTS & ANALYTICS ─────────────────────────────────────
+  const renderReports = () => {
+    if (selectedReport === "revenue") return <RevenueAttributionReport onBack={()=>setSelectedReport(null)} isMobile={isMobile}/>;
+    if (selectedReport === "sales") return <SalesPerformanceReport onBack={()=>setSelectedReport(null)} isMobile={isMobile}/>;
+    if (selectedReport === "pipeline") return <PipelineForecastReport onBack={()=>setSelectedReport(null)} isMobile={isMobile}/>;
+    if (selectedReport === "email") return <EmailAnalyticsReport onBack={()=>setSelectedReport(null)} isMobile={isMobile}/>;
+    if (selectedReport === "activity") return <ActivityReportView onBack={()=>setSelectedReport(null)} isMobile={isMobile}/>;
+    if (selectedReport === "roi") return <ChannelROIReport onBack={()=>setSelectedReport(null)} isMobile={isMobile}/>;
+
+    return (
+      <div style={secAnim(animIn)}>
+        {/* TOP SUMMARY CARDS */}
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":isTablet?"repeat(3,1fr)":"repeat(6,1fr)",gap:isMobile?8:12,marginBottom:isMobile?16:24}}>
+          {[
+            {label:"Revenue MTD",value:"$847K",change:"+23.1%",up:true,color:ACCENT_TEAL},
+            {label:"Deals Closed",value:"89",change:"+12",up:true,color:HUBSPOT_ORANGE},
+            {label:"Conversion Rate",value:"14.2%",change:"-1.3%",up:false,color:"#EF4444"},
+            {label:"Avg Deal Size",value:"$23.4K",change:"+8.4%",up:true,color:ACCENT_BLUE},
+            {label:"Pipeline Value",value:"$4.8M",change:"+18%",up:true,color:"#A78BFA"},
+            {label:"Email Open Rate",value:"43.0%",change:"+2.1%",up:true,color:"#22C55E"},
+          ].map((m,i)=>(
+            <div key={i} style={{...crd,textAlign:"center",padding:isMobile?"12px":"16px"}}>
+              <div style={{fontSize:isMobile?16:20,fontWeight:800,color:"#fff",fontFamily:"'JetBrains Mono', monospace"}}>{m.value}</div>
+              <div style={{fontSize:10,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{m.label}</div>
+              <div style={{fontSize:11,color:m.up?"#22C55E":"#EF4444",fontWeight:600,marginTop:4}}>{m.change}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* REPORT CATEGORIES */}
+        <div style={{...crd,marginBottom:isMobile?12:20}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4,flexWrap:"wrap",gap:8}}>
+            <div>
+              <div style={{fontSize:isMobile?16:18,fontWeight:700,color:"#fff"}}>Report Library</div>
+              <div style={{fontSize:12,color:"#64748b"}}>Click any report to view the full dashboard with drill-down analytics</div>
+            </div>
+            <div style={{display:"flex",gap:8,alignItems:"center"}}>
+              <span style={{padding:"6px 14px",borderRadius:8,fontSize:11,fontWeight:600,background:`${ACCENT_TEAL}12`,color:ACCENT_TEAL,border:`1px solid ${ACCENT_TEAL}30`}}>6 reports</span>
+              <span style={{padding:"6px 14px",borderRadius:8,fontSize:11,fontWeight:600,background:`${HUBSPOT_ORANGE}12`,color:HUBSPOT_ORANGE,border:`1px solid ${HUBSPOT_ORANGE}30`}}>Q1 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":isTablet?"1fr 1fr":"repeat(3,1fr)",gap:isMobile?10:16,marginBottom:24}}>
+          {REPORT_CATEGORIES.map((cat,i)=>(
+            <div key={i} onClick={()=>setSelectedReport(cat.id)} style={{
+              ...crd,cursor:"pointer",position:"relative",overflow:"hidden",transition:"all 0.3s cubic-bezier(0.4,0,0.2,1)",
+            }}
+            onMouseEnter={e=>{e.currentTarget.style.borderColor=`${cat.color}40`;e.currentTarget.style.boxShadow=`0 0 30px ${cat.color}15`;e.currentTarget.style.transform="translateY(-2px)"}}
+            onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";e.currentTarget.style.boxShadow="none";e.currentTarget.style.transform="translateY(0)"}}>
+              <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:`linear-gradient(90deg,${cat.color},${cat.color}44)`,opacity:0.6}}/>
+              <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+                <div style={{width:44,height:44,borderRadius:12,background:`${cat.color}12`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,border:`1px solid ${cat.color}20`}}>{cat.icon}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:15,fontWeight:700,color:"#fff"}}>{cat.name}</div>
+                  <div style={{fontSize:11,color:cat.color,fontWeight:600}}>{cat.count}</div>
+                </div>
+              </div>
+              <div style={{fontSize:12,color:"#94a3b8",lineHeight:1.6,marginBottom:14}}>{cat.desc}</div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{fontSize:12,color:cat.color,fontWeight:600}}>View report →</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* QUICK INSIGHTS */}
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:isMobile?10:16}}>
+          <div style={crd}>
+            <div style={{fontSize:isMobile?14:15,fontWeight:700,color:"#fff",marginBottom:16}}>Revenue by Source (Quick View)</div>
+            <div style={{display:"flex",alignItems:isMobile?"flex-start":"center",gap:isMobile?12:20,flexDirection:isMobile?"column":"row"}}>
+              <DonutChart data={REPORTS_DATA.revenueAttribution} size={isMobile?120:140}/>
+              <div style={{flex:1}}>
+                {REPORTS_DATA.revenueAttribution.slice(0,5).map((d,i)=>(
+                  <div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:8,fontSize:12}}>
+                    <div style={{width:8,height:8,borderRadius:2,background:d.color,flexShrink:0}}/>
+                    <span style={{color:"#94a3b8",flex:1}}>{d.source}</span>
+                    <span style={{color:"#fff",fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>${(d.revenue/1000).toFixed(0)}K</span>
+                  </div>
+                ))}
+                <div style={{marginTop:8,fontSize:11,color:HUBSPOT_ORANGE,fontWeight:600,cursor:"pointer"}} onClick={()=>setSelectedReport("revenue")}>See full report →</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={crd}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+              <div style={{fontSize:isMobile?14:15,fontWeight:700,color:"#fff"}}>Top Sales Reps</div>
+              <span style={{fontSize:11,color:HUBSPOT_ORANGE,cursor:"pointer",fontWeight:600}} onClick={()=>setSelectedReport("sales")}>Full leaderboard →</span>
+            </div>
+            {REPORTS_DATA.salesLeaderboard.slice(0,3).map((rep,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderBottom:i<2?"1px solid rgba(255,255,255,0.04)":"none"}}>
+                <span style={{fontSize:16,fontWeight:800,color:i===0?"#FFD700":i===1?"#C0C0C0":"#CD7F32",fontFamily:"'JetBrains Mono', monospace",width:24}}>#{i+1}</span>
+                <div style={{width:32,height:32,borderRadius:"50%",background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#fff"}}>{rep.avatar}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:13,fontWeight:600,color:"#fff"}}>{rep.name}</div>
+                  <div style={{fontSize:11,color:"#64748b"}}>{rep.revenue} · {rep.closed} deals</div>
+                </div>
+                <div style={{width:60}}><AreaChart data={rep.trend} color={HUBSPOT_ORANGE} height={24}/></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const SECTIONS = {overview:renderOverview,pipeline:renderPipeline,hubs:renderHubs,workflows:renderWorkflows,integrations:renderIntegrations,reports:renderReports,contacts:renderContacts};
 
   // ─── ROOT RENDER ───────────────────────────────────────────────
   return (
@@ -1355,27 +2179,91 @@ function HubSpotCommandCenter() {
       )}
 
       {/* MAIN CONTENT */}
-      <div style={{flex:1,padding:isMobile?"16px 14px 100px 14px":isTablet?"20px 24px":"24px 32px",overflowY:"auto",position:"relative",zIndex:5,maxHeight:isMobile?"unset":"100vh"}}>
+      <div onClick={()=>showNotifications&&setShowNotifications(false)} style={{flex:1,padding:isMobile?"16px 14px 100px 14px":isTablet?"20px 24px":"24px 32px",overflowY:"auto",position:"relative",zIndex:5,maxHeight:isMobile?"unset":"100vh"}}>
         {!isMobile && (
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:28}}>
             <div>
               <div style={{fontSize:isTablet?22:28,fontWeight:700,letterSpacing:"-0.5px",background:"linear-gradient(135deg,#fff 0%,#94a3b8 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{TITLES[activeNav]}</div>
               <div style={{fontSize:13,color:"#64748b",marginTop:4}}>{SUBS[activeNav]}</div>
             </div>
-            <div style={{display:"flex",alignItems:"center",gap:16}}>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              {/* NOTIFICATION BELL */}
+              <div onClick={()=>setShowNotifications(!showNotifications)} style={{position:"relative",width:38,height:38,borderRadius:10,background:GLASS,border:"1px solid rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",transition:"all 0.2s",fontSize:15}}
+                onMouseEnter={e=>{e.currentTarget.style.borderColor=`${HUBSPOT_ORANGE}40`;e.currentTarget.style.background=`${HUBSPOT_ORANGE}10`}}
+                onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";e.currentTarget.style.background=GLASS}}>
+                🔔
+                <div style={{position:"absolute",top:6,right:6,width:8,height:8,borderRadius:"50%",background:"#EF4444",border:`2px solid ${BG_DARK}`,boxShadow:"0 0 6px #EF444460"}}/>
+              </div>
+
+              {/* QUICK ACTIONS */}
+              <div onClick={()=>switchNav("reports")} style={{display:"flex",alignItems:"center",gap:6,padding:"8px 14px",borderRadius:10,background:`${HUBSPOT_ORANGE}10`,border:`1px solid ${HUBSPOT_ORANGE}25`,cursor:"pointer",transition:"all 0.2s"}}
+                onMouseEnter={e=>{e.currentTarget.style.background=`${HUBSPOT_ORANGE}20`}}
+                onMouseLeave={e=>{e.currentTarget.style.background=`${HUBSPOT_ORANGE}10`}}>
+                <span style={{fontSize:12}}>◧</span>
+                <span style={{fontSize:12,fontWeight:600,color:HUBSPOT_ORANGE}}>Reports</span>
+              </div>
+
               <div style={{fontSize:13,color:"#64748b",background:GLASS,padding:"8px 16px",borderRadius:10,border:"1px solid rgba(255,255,255,0.06)",backdropFilter:"blur(10px)"}}>{time.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})} · {time.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"})}</div>
             </div>
+
+            {/* NOTIFICATION DROPDOWN */}
+            {showNotifications && (
+              <div style={{position:"absolute",top:70,right:32,width:360,background:"rgba(15,23,42,0.97)",borderRadius:16,border:"1px solid rgba(255,255,255,0.08)",boxShadow:"0 20px 60px rgba(0,0,0,0.5)",zIndex:50,backdropFilter:"blur(24px)",animation:"fadeSlideIn 0.2s ease",overflow:"hidden"}}>
+                <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }`}</style>
+                <div style={{padding:"16px 20px",borderBottom:"1px solid rgba(255,255,255,0.06)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <span style={{fontSize:14,fontWeight:700,color:"#fff"}}>Notifications</span>
+                  <span style={{padding:"2px 8px",borderRadius:12,fontSize:10,fontWeight:600,background:"#EF444420",color:"#EF4444"}}>3 new</span>
+                </div>
+                {[
+                  {icon:"🎉",title:"Deal Closed — Stratosphere AI",desc:"$210,000 · Sarah Chen closed the deal","time":"2 min ago",color:"#22C55E"},
+                  {icon:"⚠️",title:"Zoom integration token expiring",desc:"Re-authorize to continue syncing meetings","time":"1 hr ago",color:"#F59E0B"},
+                  {icon:"📊",title:"Weekly report ready",desc:"Q1 pipeline & revenue report generated","time":"3 hrs ago",color:ACCENT_BLUE},
+                  {icon:"✉️",title:"Email campaign completed",desc:"Q1 Product Launch — 52.3% open rate","time":"5 hrs ago",color:"#A78BFA"},
+                  {icon:"🔔",title:"MQL handoff triggered",desc:"3 new contacts reached SQL threshold","time":"6 hrs ago",color:ACCENT_TEAL},
+                ].map((n,i)=>(
+                  <div key={i} style={{padding:"12px 20px",borderBottom:"1px solid rgba(255,255,255,0.04)",cursor:"pointer",transition:"background 0.15s",display:"flex",gap:12,alignItems:"flex-start"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,0.03)"}
+                    onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                    <div style={{fontSize:16,marginTop:2}}>{n.icon}</div>
+                    <div style={{flex:1,minWidth:0}}>
+                      <div style={{fontSize:12,fontWeight:600,color:"#E2E8F0"}}>{n.title}</div>
+                      <div style={{fontSize:11,color:"#64748b",marginTop:2}}>{n.desc}</div>
+                      <div style={{fontSize:10,color:n.color,marginTop:4,fontWeight:600}}>{n.time}</div>
+                    </div>
+                    {i<2 && <div style={{width:6,height:6,borderRadius:"50%",background:HUBSPOT_ORANGE,marginTop:6,flexShrink:0}}/>}
+                  </div>
+                ))}
+                <div style={{padding:"12px 20px",textAlign:"center",fontSize:12,color:HUBSPOT_ORANGE,fontWeight:600,cursor:"pointer"}}
+                  onMouseEnter={e=>e.currentTarget.style.background="rgba(255,122,89,0.06)"}
+                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                  View all notifications
+                </div>
+              </div>
+            )}
           </div>
         )}
         {isMobile && <div style={{fontSize:12,color:"#64748b",marginBottom:14,lineHeight:1.4}}>{SUBS[activeNav]}</div>}
         {SECTIONS[activeNav]?.()}
 
         {/* FOOTER WITH CREDITS */}
-        <div style={{marginTop:40,padding:"16px 0",borderTop:"1px solid rgba(255,255,255,0.04)",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
-          <div style={{fontSize:11,color:"#334155"}}>
-            Engineered by <span style={{color:HUBSPOT_ORANGE,fontWeight:700}}>Rounak</span> · HubSpot Command Center v2.0
+        <div style={{marginTop:40,padding:"20px 0 8px 0",borderTop:"1px solid rgba(255,255,255,0.04)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,marginBottom:12}}>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <div style={{width:28,height:28,borderRadius:8,background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,color:"#fff"}}>H</div>
+              <div>
+                <div style={{fontSize:12,color:"#475569"}}>Engineered by <span style={{color:HUBSPOT_ORANGE,fontWeight:700}}>Rounak</span> · HubSpot Command Center v2.0</div>
+              </div>
+            </div>
+            <div style={{display:"flex",gap:16,alignItems:"center"}}>
+              <span style={{fontSize:10,color:"#1E293B"}}>NexaTech Solutions · Enterprise CRM</span>
+              <span style={{fontSize:10,color:"#1E293B"}}>Last sync: {time.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"})}</span>
+            </div>
           </div>
-          <div style={{fontSize:10,color:"#1E293B"}}>NexaTech Solutions · Enterprise CRM Implementation</div>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            {["Marketing Hub","Sales Hub","Service Hub","CMS Hub","Operations Hub"].map((h,i)=>(
+              <span key={i} style={{padding:"2px 8px",borderRadius:6,fontSize:9,fontWeight:500,background:"rgba(255,255,255,0.02)",color:"#1E293B",border:"1px solid rgba(255,255,255,0.02)"}}>{h} ✓</span>
+            ))}
+          </div>
         </div>
       </div>
 
