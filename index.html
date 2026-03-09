@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HubSpot Command Center — by Rounak</title>
+  <meta name="description" content="HubSpot Enterprise CRM Command Center — Built by Rounak" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟠</text></svg>">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0B0F1A; overflow-x: hidden; }
+    #root { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.4/babel.min.js"></script>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+// ─── CONSTANTS & COLORS ────────────────────────────────────────
+const HUBSPOT_ORANGE = "#FF7A59";
+const HUBSPOT_CORAL = "#FF5C35";
+const ACCENT_TEAL = "#00BDA5";
+const ACCENT_BLUE = "#0091AE";
+const BG_DARK = "#0B0F1A";
+const BG_CARD = "rgba(17, 24, 39, 0.7)";
+const GLASS = "rgba(255,255,255,0.04)";
+const GLASS2 = "rgba(255,255,255,0.06)";
+
+// ─── EXTENDED DATA ─────────────────────────────────────────────
+const PIPELINE_STAGES = [
+  { name: "Awareness", deals: 847, value: "$2.4M", color: ACCENT_BLUE, pct: 100 },
+  { name: "Consideration", deals: 523, value: "$1.8M", color: ACCENT_TEAL, pct: 72 },
+  { name: "Decision", deals: 284, value: "$980K", color: HUBSPOT_ORANGE, pct: 48 },
+  { name: "Negotiation", deals: 156, value: "$620K", color: HUBSPOT_CORAL, pct: 30 },
+  { name: "Closed Won", deals: 89, value: "$340K", color: "#00BDA5", pct: 16 },
+];
+
+const METRICS = [
+  { label: "Total Contacts", value: "24,847", change: "+12.4%", up: true, icon: "👥" },
+  { label: "Active Deals", value: "1,899", change: "+8.2%", up: true, icon: "💼" },
+  { label: "Revenue MTD", value: "$847K", change: "+23.1%", up: true, icon: "💰" },
+  { label: "Conversion Rate", value: "14.2%", change: "-1.3%", up: false, icon: "📊" },
+];
+
+const RECENT_DEALS = [
+  {
+    id: "DEAL-4892", company: "Nexora Technologies", value: "$125,000", numericValue: 125000, stage: "Negotiation", owner: "Sarah Chen", priority: "high", daysInStage: 3,
+    contact: "Marcus Reynolds", email: "marcus@nexora.io", phone: "+1 (415) 555-7823", domain: "nexora.io",
+    closeDate: "2026-04-15", createDate: "2026-01-08", type: "New Business", source: "Organic Search",
+    properties: { industry: "SaaS / Technology", employees: "250-500", annualRevenue: "$50M", region: "North America" },
+    activities: [
+      { type: "email", title: "Sent proposal v3 with revised pricing", date: "Mar 8, 2026", time: "2:34 PM", user: "Sarah Chen" },
+      { type: "call", title: "Discovery call — discussed Q2 expansion budget", date: "Mar 6, 2026", time: "11:00 AM", user: "Sarah Chen", duration: "34 min" },
+      { type: "meeting", title: "Product demo with engineering leads", date: "Mar 3, 2026", time: "3:00 PM", user: "Sarah Chen", duration: "45 min" },
+      { type: "note", title: "Champion is VP of Engineering. Blocker: procurement review required >$100K", date: "Mar 3, 2026", time: "4:15 PM", user: "Sarah Chen" },
+      { type: "email", title: "Follow-up: technical requirements doc", date: "Feb 28, 2026", time: "9:12 AM", user: "James Park" },
+      { type: "task", title: "Prepare ROI analysis for CFO", date: "Feb 25, 2026", time: "10:00 AM", user: "Sarah Chen", status: "completed" },
+    ],
+    notes: "Strong buying signal. Marcus mentioned board approval expected by end of March. Need to loop in legal for MSA review."
+  },
+  {
+    id: "DEAL-4756", company: "Veltrix Solutions", value: "$89,500", numericValue: 89500, stage: "Decision", owner: "James Park", priority: "medium", daysInStage: 7,
+    contact: "Diana Okafor", email: "dokafor@veltrix.com", phone: "+1 (212) 555-4190", domain: "veltrix.com",
+    closeDate: "2026-04-30", createDate: "2025-12-15", type: "New Business", source: "Referral",
+    properties: { industry: "Financial Services", employees: "100-250", annualRevenue: "$25M", region: "East Coast" },
+    activities: [
+      { type: "email", title: "Sent case study — FinServ vertical", date: "Mar 7, 2026", time: "4:11 PM", user: "James Park" },
+      { type: "meeting", title: "Stakeholder alignment session", date: "Mar 4, 2026", time: "2:00 PM", user: "James Park", duration: "60 min" },
+      { type: "call", title: "Pricing discussion with procurement", date: "Mar 1, 2026", time: "10:30 AM", user: "James Park", duration: "22 min" },
+      { type: "note", title: "Competitor eval with Salesforce. Our edge: implementation speed + HubSpot native.", date: "Mar 1, 2026", time: "11:00 AM", user: "James Park" },
+    ],
+    notes: "Referral from Nexora. Evaluating us vs. Salesforce. Decision expected mid-April."
+  },
+  {
+    id: "DEAL-5021", company: "Stratosphere AI", value: "$210,000", numericValue: 210000, stage: "Closed Won", owner: "Sarah Chen", priority: "high", daysInStage: 1,
+    contact: "Yuki Tanaka", email: "yuki@stratosphere.ai", phone: "+1 (650) 555-8844", domain: "stratosphere.ai",
+    closeDate: "2026-03-08", createDate: "2025-11-20", type: "New Business", source: "Conference — SaaStr 2025",
+    properties: { industry: "Artificial Intelligence", employees: "500-1000", annualRevenue: "$120M", region: "West Coast" },
+    activities: [
+      { type: "email", title: "Contract signed — welcome aboard!", date: "Mar 8, 2026", time: "11:22 AM", user: "Sarah Chen" },
+      { type: "meeting", title: "Final contract review", date: "Mar 7, 2026", time: "1:00 PM", user: "Sarah Chen", duration: "30 min" },
+      { type: "call", title: "Legal review complete — green light", date: "Mar 5, 2026", time: "3:45 PM", user: "Sarah Chen", duration: "15 min" },
+      { type: "task", title: "Prepare onboarding kickoff deck", date: "Mar 8, 2026", time: "2:00 PM", user: "Sarah Chen", status: "in-progress" },
+    ],
+    notes: "Largest deal this quarter! 3-year contract with annual renewal. Onboarding starts March 15."
+  },
+  {
+    id: "DEAL-4611", company: "Pulsewave Media", value: "$67,000", numericValue: 67000, stage: "Consideration", owner: "Amir Khan", priority: "low", daysInStage: 12,
+    contact: "Leo Dubois", email: "leo@pulsewave.co", phone: "+44 20 7946 0958", domain: "pulsewave.co",
+    closeDate: "2026-05-30", createDate: "2025-12-01", type: "Expansion", source: "Inbound — Blog CTA",
+    properties: { industry: "Media & Entertainment", employees: "50-100", annualRevenue: "$10M", region: "EMEA" },
+    activities: [
+      { type: "email", title: "Shared product roadmap for H2 2026", date: "Mar 5, 2026", time: "8:45 AM", user: "Amir Khan" },
+      { type: "call", title: "Initial discovery — content workflow pain points", date: "Feb 27, 2026", time: "4:00 PM", user: "Amir Khan", duration: "28 min" },
+    ],
+    notes: "Low urgency. Exploring options for content distribution automation. Follow up mid-March."
+  },
+  {
+    id: "DEAL-4930", company: "Horizon Dynamics", value: "$156,000", numericValue: 156000, stage: "Negotiation", owner: "Lisa Wong", priority: "high", daysInStage: 5,
+    contact: "Raj Mehta", email: "raj.mehta@horizondyn.com", phone: "+1 (312) 555-6721", domain: "horizondyn.com",
+    closeDate: "2026-04-10", createDate: "2026-01-22", type: "New Business", source: "Partner Referral",
+    properties: { industry: "Manufacturing", employees: "1000-5000", annualRevenue: "$300M", region: "Midwest" },
+    activities: [
+      { type: "meeting", title: "Executive sponsor intro — CRO level", date: "Mar 7, 2026", time: "10:00 AM", user: "Lisa Wong", duration: "45 min" },
+      { type: "email", title: "Updated SOW with implementation timeline", date: "Mar 6, 2026", time: "5:30 PM", user: "Lisa Wong" },
+      { type: "call", title: "Technical requirements deep-dive", date: "Mar 4, 2026", time: "2:00 PM", user: "Lisa Wong", duration: "50 min" },
+      { type: "note", title: "Multi-year potential. Want CRM + Marketing Hub bundled. Legal reviewing our MSA.", date: "Mar 4, 2026", time: "3:00 PM", user: "Lisa Wong" },
+      { type: "task", title: "Create custom demo environment", date: "Mar 3, 2026", time: "9:00 AM", user: "Lisa Wong", status: "completed" },
+    ],
+    notes: "Enterprise-grade opportunity. CRO is champion. Multi-year contract under negotiation."
+  },
+  {
+    id: "DEAL-4455", company: "Codecraft Studio", value: "$43,200", numericValue: 43200, stage: "Decision", owner: "James Park", priority: "medium", daysInStage: 9,
+    contact: "Nina Vasquez", email: "nina@codecraft.studio", phone: "+1 (503) 555-2244", domain: "codecraft.studio",
+    closeDate: "2026-04-20", createDate: "2026-01-05", type: "New Business", source: "Webinar Attendee",
+    properties: { industry: "Software Development", employees: "25-50", annualRevenue: "$5M", region: "West Coast" },
+    activities: [
+      { type: "email", title: "Proposal sent — Starter + Growth bundle", date: "Mar 6, 2026", time: "3:22 PM", user: "James Park" },
+      { type: "meeting", title: "Product walkthrough with CTO", date: "Mar 2, 2026", time: "11:00 AM", user: "James Park", duration: "35 min" },
+      { type: "call", title: "Budget discussion — Q2 allocation", date: "Feb 26, 2026", time: "1:15 PM", user: "James Park", duration: "18 min" },
+    ],
+    notes: "Small but fast-moving. CTO is technical buyer. Could close quickly once budget is approved."
+  },
+];
+
+const WORKFLOWS_DATA = [
+  {
+    id: "WF-001", name: "Lead Nurture Sequence", type: "Email", enrolled: 1243, completed: 876, status: "active",
+    description: "Automated 5-step email nurture for new MQLs. Triggers on form submission or lead score > 40.",
+    trigger: "Form Submission OR Lead Score > 40",
+    goalCriteria: "Contact becomes SQL or books a meeting",
+    createdBy: "Sarah Chen", lastModified: "Mar 5, 2026",
+    steps: [
+      { id: 1, type: "trigger", label: "Form Submission", desc: "Contact submits any marketing form", icon: "⚡", delay: null },
+      { id: 2, type: "delay", label: "Wait 1 day", desc: "Delay before first touchpoint", icon: "⏱", delay: "1 day" },
+      { id: 3, type: "email", label: "Welcome Email", desc: "Personalized welcome with resource links", icon: "✉️", stats: { sent: 1243, opened: 867, clicked: 423, rate: "69.8%" } },
+      { id: 4, type: "delay", label: "Wait 3 days", desc: "Wait for engagement signals", icon: "⏱", delay: "3 days" },
+      { id: 5, type: "branch", label: "Opened Email?", desc: "If/then branch based on email open", icon: "🔀", yesPath: "Send Case Study", noPath: "Send Re-engagement" },
+      { id: 6, type: "email", label: "Case Study Email", desc: "Industry-specific case study", icon: "✉️", stats: { sent: 867, opened: 612, clicked: 298, rate: "70.6%" } },
+      { id: 7, type: "delay", label: "Wait 5 days", desc: "Allow time for consideration", icon: "⏱", delay: "5 days" },
+      { id: 8, type: "email", label: "Product Demo CTA", desc: "Offer a personalized product demo", icon: "✉️", stats: { sent: 612, opened: 445, clicked: 187, rate: "72.7%" } },
+      { id: 9, type: "action", label: "Update Lifecycle", desc: "Set lifecycle stage to SQL", icon: "🔄" },
+      { id: 10, type: "action", label: "Notify Sales Owner", desc: "Internal notification to deal owner", icon: "🔔" },
+    ],
+    performance: { enrollmentRate: 87, completionRate: 70.5, conversionRate: 23.4, avgTimeToComplete: "14 days" }
+  },
+  {
+    id: "WF-002", name: "Onboarding Pipeline", type: "Deal", enrolled: 89, completed: 67, status: "active",
+    description: "Post-sale onboarding workflow. Auto-creates tasks, sends welcome sequence, assigns CSM.",
+    trigger: "Deal Stage = Closed Won",
+    goalCriteria: "Customer completes product setup + first campaign launched",
+    createdBy: "Lisa Wong", lastModified: "Mar 2, 2026",
+    steps: [
+      { id: 1, type: "trigger", label: "Deal Closed Won", desc: "Triggers when deal moves to Closed Won", icon: "⚡", delay: null },
+      { id: 2, type: "action", label: "Create Onboarding Ticket", desc: "Auto-create service ticket for implementation", icon: "🎫" },
+      { id: 3, type: "action", label: "Assign CSM", desc: "Route to customer success manager based on region", icon: "👤" },
+      { id: 4, type: "email", label: "Welcome Package", desc: "Onboarding guide + portal access", icon: "✉️", stats: { sent: 89, opened: 84, clicked: 71, rate: "94.4%" } },
+      { id: 5, type: "delay", label: "Wait 2 days", desc: "Allow account setup time", icon: "⏱", delay: "2 days" },
+      { id: 6, type: "action", label: "Schedule Kickoff", desc: "Auto-schedule 30-min kickoff call", icon: "📅" },
+      { id: 7, type: "branch", label: "Setup Complete?", desc: "Check if portal access activated", icon: "🔀", yesPath: "Send Tips", noPath: "Send Reminder" },
+      { id: 8, type: "email", label: "Pro Tips & Resources", desc: "Best practices and quick-start guide", icon: "✉️", stats: { sent: 67, opened: 61, clicked: 48, rate: "91.0%" } },
+    ],
+    performance: { enrollmentRate: 100, completionRate: 75.3, conversionRate: 89.2, avgTimeToComplete: "7 days" }
+  },
+  {
+    id: "WF-003", name: "Re-engagement Campaign", type: "Email", enrolled: 2341, completed: 1890, status: "active",
+    description: "Win-back sequence for contacts inactive >60 days. Progressive offers to re-engage.",
+    trigger: "Last Activity Date > 60 days ago",
+    goalCriteria: "Contact opens email OR visits website",
+    createdBy: "Amir Khan", lastModified: "Feb 28, 2026",
+    steps: [
+      { id: 1, type: "trigger", label: "Inactivity > 60d", desc: "Contact has no activity in 60+ days", icon: "⚡", delay: null },
+      { id: 2, type: "email", label: "We Miss You", desc: "Soft re-engagement with value prop reminder", icon: "✉️", stats: { sent: 2341, opened: 1124, clicked: 387, rate: "48.0%" } },
+      { id: 3, type: "delay", label: "Wait 7 days", desc: "Wait for response", icon: "⏱", delay: "7 days" },
+      { id: 4, type: "branch", label: "Engaged?", desc: "Check for any engagement signal", icon: "🔀", yesPath: "Move to Nurture", noPath: "Send Offer" },
+      { id: 5, type: "email", label: "Exclusive Offer", desc: "Special incentive to return", icon: "✉️", stats: { sent: 1217, opened: 698, clicked: 234, rate: "57.4%" } },
+      { id: 6, type: "delay", label: "Wait 14 days", desc: "Final waiting period", icon: "⏱", delay: "14 days" },
+      { id: 7, type: "email", label: "Last Chance", desc: "Final touchpoint before sunset", icon: "✉️", stats: { sent: 519, opened: 201, clicked: 67, rate: "38.7%" } },
+      { id: 8, type: "action", label: "Update Status", desc: "Mark as disengaged if no response", icon: "🔄" },
+    ],
+    performance: { enrollmentRate: 100, completionRate: 80.7, conversionRate: 34.1, avgTimeToComplete: "28 days" }
+  },
+  {
+    id: "WF-004", name: "Ticket Escalation", type: "Service", enrolled: 156, completed: 134, status: "paused",
+    description: "Auto-escalation workflow for high-priority tickets not resolved within SLA.",
+    trigger: "Ticket Priority = High AND Time in Stage > SLA",
+    goalCriteria: "Ticket resolved and closed",
+    createdBy: "James Park", lastModified: "Mar 1, 2026",
+    steps: [
+      { id: 1, type: "trigger", label: "SLA Breach", desc: "High-priority ticket exceeds response time", icon: "⚡" },
+      { id: 2, type: "action", label: "Reassign to Senior", desc: "Escalate to senior support engineer", icon: "👤" },
+      { id: 3, type: "action", label: "Notify Manager", desc: "Alert team lead of SLA breach", icon: "🔔" },
+      { id: 4, type: "delay", label: "Wait 4 hours", desc: "Monitor for resolution", icon: "⏱", delay: "4 hours" },
+      { id: 5, type: "branch", label: "Resolved?", desc: "Check ticket status", icon: "🔀", yesPath: "Send Survey", noPath: "Escalate to Director" },
+      { id: 6, type: "action", label: "Director Escalation", desc: "Final escalation tier", icon: "🚨" },
+    ],
+    performance: { enrollmentRate: 100, completionRate: 85.9, conversionRate: 92.3, avgTimeToComplete: "6 hours" }
+  },
+  {
+    id: "WF-005", name: "MQL to SQL Handoff", type: "Contact", enrolled: 567, completed: 423, status: "active",
+    description: "Marketing-to-sales handoff. Scores leads, assigns owners, creates deals automatically.",
+    trigger: "Lead Score >= 50 AND Lifecycle = MQL",
+    goalCriteria: "Deal created and first meeting booked",
+    createdBy: "Sarah Chen", lastModified: "Mar 7, 2026",
+    steps: [
+      { id: 1, type: "trigger", label: "MQL Threshold", desc: "Lead score reaches 50+", icon: "⚡" },
+      { id: 2, type: "action", label: "Update Lifecycle", desc: "Change lifecycle stage to SQL", icon: "🔄" },
+      { id: 3, type: "action", label: "Assign Owner", desc: "Round-robin assignment to sales team", icon: "👤" },
+      { id: 4, type: "action", label: "Create Deal", desc: "Auto-create deal in pipeline", icon: "💼" },
+      { id: 5, type: "email", label: "Sales Intro Email", desc: "Personalized intro from assigned rep", icon: "✉️", stats: { sent: 567, opened: 445, clicked: 312, rate: "78.5%" } },
+      { id: 6, type: "delay", label: "Wait 2 days", desc: "Allow time for response", icon: "⏱", delay: "2 days" },
+      { id: 7, type: "action", label: "Create Task", desc: "Follow-up task for sales rep", icon: "✅" },
+      { id: 8, type: "action", label: "Notify Manager", desc: "Weekly digest of handoffs", icon: "🔔" },
+    ],
+    performance: { enrollmentRate: 94, completionRate: 74.6, conversionRate: 41.8, avgTimeToComplete: "5 days" }
+  },
+];
+
+const INTEGRATIONS_DATA = [
+  {
+    name: "Salesforce", status: "connected", synced: "2 min ago", records: "12.4K", icon: "☁️", color: "#00A1E0",
+    description: "Bi-directional CRM sync with contact, company, and deal data flowing between platforms.",
+    syncHistory: [
+      { time: "2 min ago", action: "Synced 47 contacts", status: "success" },
+      { time: "15 min ago", action: "Updated 12 deals", status: "success" },
+      { time: "1 hr ago", action: "Synced 234 contacts", status: "success" },
+      { time: "3 hrs ago", action: "Company merge conflict", status: "warning" },
+      { time: "6 hrs ago", action: "Full sync completed", status: "success" },
+    ],
+    fieldMappings: [
+      { hs: "Email", sf: "Email", direction: "bi", status: "active" },
+      { hs: "Company Name", sf: "Account Name", direction: "bi", status: "active" },
+      { hs: "Deal Amount", sf: "Opportunity Amount", direction: "bi", status: "active" },
+      { hs: "Lifecycle Stage", sf: "Lead Status", direction: "hs→sf", status: "active" },
+      { hs: "Lead Score", sf: "Custom: HubSpot Score", direction: "hs→sf", status: "active" },
+    ],
+    stats: { totalSynced: "12,438", errors: 3, lastFullSync: "6 hrs ago", syncFrequency: "Every 5 min" }
+  },
+  {
+    name: "Slack", status: "connected", synced: "Just now", records: "8.2K", icon: "💬", color: "#4A154B",
+    description: "Real-time notifications for deal updates, form submissions, and team activity.",
+    syncHistory: [
+      { time: "Just now", action: "Deal alert: Stratosphere AI closed", status: "success" },
+      { time: "10 min ago", action: "Form submission notification", status: "success" },
+      { time: "30 min ago", action: "Weekly digest sent to #sales", status: "success" },
+      { time: "2 hrs ago", action: "Deal stage change alert", status: "success" },
+    ],
+    fieldMappings: [
+      { hs: "Deal Stage Change", sf: "#sales-pipeline", direction: "hs→slack", status: "active" },
+      { hs: "Form Submissions", sf: "#marketing-leads", direction: "hs→slack", status: "active" },
+      { hs: "Ticket Created", sf: "#support-queue", direction: "hs→slack", status: "active" },
+    ],
+    stats: { totalSynced: "8,234", errors: 0, lastFullSync: "N/A — Real-time", syncFrequency: "Instant" }
+  },
+  {
+    name: "Stripe", status: "connected", synced: "5 min ago", records: "3.1K", icon: "💳", color: "#635BFF",
+    description: "Payment and subscription data synced to contact and deal records.",
+    syncHistory: [
+      { time: "5 min ago", action: "New payment: $2,400", status: "success" },
+      { time: "1 hr ago", action: "Subscription renewed: Nexora", status: "success" },
+      { time: "4 hrs ago", action: "Invoice sync completed", status: "success" },
+      { time: "1 day ago", action: "Failed charge — retry scheduled", status: "warning" },
+    ],
+    fieldMappings: [
+      { hs: "Deal Amount", sf: "Invoice Total", direction: "stripe→hs", status: "active" },
+      { hs: "Payment Status", sf: "Charge Status", direction: "stripe→hs", status: "active" },
+      { hs: "MRR", sf: "Subscription MRR", direction: "stripe→hs", status: "active" },
+    ],
+    stats: { totalSynced: "3,102", errors: 1, lastFullSync: "4 hrs ago", syncFrequency: "Every 5 min" }
+  },
+  {
+    name: "Google Ads", status: "connected", synced: "12 min ago", records: "45.6K", icon: "📢", color: "#4285F4",
+    description: "Ad performance data and conversion tracking synced for ROI attribution.",
+    syncHistory: [
+      { time: "12 min ago", action: "Campaign data refresh", status: "success" },
+      { time: "1 hr ago", action: "Conversion events synced", status: "success" },
+      { time: "6 hrs ago", action: "Audience list updated", status: "success" },
+    ],
+    fieldMappings: [
+      { hs: "Original Source", sf: "Campaign Name", direction: "gads→hs", status: "active" },
+      { hs: "Ad Group", sf: "Ad Group Name", direction: "gads→hs", status: "active" },
+      { hs: "Cost Per Lead", sf: "CPC / CPL", direction: "gads→hs", status: "active" },
+    ],
+    stats: { totalSynced: "45,612", errors: 0, lastFullSync: "12 min ago", syncFrequency: "Every 15 min" }
+  },
+  {
+    name: "Zoom", status: "warning", synced: "2 hrs ago", records: "1.8K", icon: "📹", color: "#2D8CFF",
+    description: "Meeting recordings and attendance data logged to contact timelines.",
+    syncHistory: [
+      { time: "2 hrs ago", action: "Token refresh failed — retrying", status: "warning" },
+      { time: "5 hrs ago", action: "3 meeting recordings synced", status: "success" },
+      { time: "1 day ago", action: "Attendance data updated", status: "success" },
+    ],
+    fieldMappings: [
+      { hs: "Meeting Notes", sf: "Recording URL", direction: "zoom→hs", status: "active" },
+      { hs: "Last Meeting", sf: "Meeting Date", direction: "zoom→hs", status: "paused" },
+    ],
+    stats: { totalSynced: "1,823", errors: 7, lastFullSync: "2 hrs ago", syncFrequency: "Every 30 min" }
+  },
+  {
+    name: "Mailchimp", status: "disconnected", synced: "N/A", records: "—", icon: "🐵", color: "#FFE01B",
+    description: "Email marketing platform — currently disconnected. Requires re-authorization.",
+    syncHistory: [
+      { time: "2 weeks ago", action: "Authorization expired", status: "error" },
+      { time: "2 weeks ago", action: "Last successful sync: 5,200 contacts", status: "success" },
+    ],
+    fieldMappings: [],
+    stats: { totalSynced: "0", errors: 0, lastFullSync: "2 weeks ago", syncFrequency: "Disconnected" }
+  },
+];
+
+const MONTHLY_DATA = [
+  { month: "Sep", leads: 320, deals: 45, revenue: 62 },
+  { month: "Oct", leads: 410, deals: 58, revenue: 78 },
+  { month: "Nov", leads: 380, deals: 52, revenue: 71 },
+  { month: "Dec", leads: 290, deals: 38, revenue: 55 },
+  { month: "Jan", leads: 460, deals: 67, revenue: 89 },
+  { month: "Feb", leads: 520, deals: 78, revenue: 102 },
+  { month: "Mar", leads: 580, deals: 84, revenue: 118 },
+];
+
+const HUBS_CONFIG = [
+  {
+    name: "Marketing Hub", icon: "📢", color: HUBSPOT_ORANGE,
+    features: [
+      { name: "Email Campaigns", desc: "Drag-and-drop email builder with A/B testing", stat: "12 active campaigns", detail: "Open rate: 42.3% | Click rate: 8.7% | Unsubscribes: 0.2%" },
+      { name: "Landing Pages", desc: "Conversion-optimized page builder", stat: "34 published pages", detail: "Avg. conversion rate: 18.4% | Top page: Product Demo Request (32.1%)" },
+      { name: "Social Media", desc: "Cross-platform publishing and monitoring", stat: "Connected: Twitter, LinkedIn, Facebook", detail: "Scheduled posts: 47 | Engagement rate: 4.8%" },
+      { name: "SEO Tools", desc: "Topic clusters and content strategy", stat: "8 topic clusters active", detail: "Organic traffic: +34% QoQ | Top keyword: 'CRM automation'" },
+      { name: "Ad Management", desc: "ROI tracking across ad platforms", stat: "$12.4K spend this month", detail: "ROAS: 4.2x | CPL: $28.50 | Conversions: 435" },
+    ],
+  },
+  {
+    name: "Sales Hub", icon: "🎯", color: ACCENT_TEAL,
+    features: [
+      { name: "Deal Pipeline", desc: "Visual pipeline management with forecasting", stat: "1,899 active deals", detail: "Forecast: $2.1M | Pipeline velocity: 23 days avg." },
+      { name: "Sequences", desc: "Automated outreach cadences", stat: "8 active sequences", detail: "Reply rate: 14.2% | Meeting booked rate: 6.8%" },
+      { name: "Meeting Scheduler", desc: "Round-robin and group scheduling", stat: "142 meetings this month", detail: "No-show rate: 8.3% | Avg. prep time: 12 min" },
+      { name: "Quotes", desc: "Branded quote generation with e-sign", stat: "67 quotes sent", detail: "Acceptance rate: 72.4% | Avg. time to sign: 3.2 days" },
+      { name: "Playbooks", desc: "Guided selling with battle cards", stat: "12 playbooks active", detail: "Most used: Competitive Positioning | Usage rate: 87%" },
+    ],
+  },
+  {
+    name: "Service Hub", icon: "🛠", color: ACCENT_BLUE,
+    features: [
+      { name: "Tickets", desc: "Multi-channel ticket management", stat: "234 open tickets", detail: "Avg. resolution: 4.2 hrs | CSAT: 94.2% | First response: 12 min" },
+      { name: "Knowledge Base", desc: "Self-service help center", stat: "189 articles published", detail: "Monthly views: 12.4K | Helpful rate: 89.3%" },
+      { name: "Customer Portal", desc: "Branded customer self-service", stat: "1,247 active users", detail: "Ticket deflection rate: 34.5% | Avg. session: 6.2 min" },
+      { name: "Feedback Surveys", desc: "NPS, CSAT, and custom surveys", stat: "NPS Score: 72", detail: "Response rate: 34.8% | Last survey: Feb 28, 2026" },
+      { name: "SLA Management", desc: "Service level agreement tracking", stat: "SLA compliance: 96.4%", detail: "Breached this month: 7 | Avg. resolution within SLA: 2.1 hrs" },
+    ],
+  },
+  {
+    name: "CMS Hub", icon: "🌐", color: "#7C3AED",
+    features: [
+      { name: "Website Pages", desc: "Drag-and-drop page builder", stat: "87 published pages", detail: "Monthly traffic: 145K | Bounce rate: 32.4%" },
+      { name: "Blog", desc: "SEO-optimized blog management", stat: "234 posts published", detail: "Monthly readers: 28K | Avg. time on page: 4.2 min" },
+      { name: "Dynamic Content", desc: "Smart content based on visitor data", stat: "23 smart modules", detail: "Personalization lift: +18% conversion rate" },
+      { name: "A/B Testing", desc: "Page and CTA split testing", stat: "5 active tests", detail: "Avg. improvement: +12.3% | Statistical significance: 95%" },
+      { name: "SEO Recommendations", desc: "Real-time SEO optimization", stat: "14 pending recommendations", detail: "Implemented this month: 23 | Traffic impact: +8.7%" },
+    ],
+  },
+  {
+    name: "Operations Hub", icon: "⚙️", color: "#F59E0B",
+    features: [
+      { name: "Data Sync", desc: "Bi-directional data sync with 100+ apps", stat: "6 active syncs", detail: "Records synced today: 4,892 | Error rate: 0.02%" },
+      { name: "Workflow Extensions", desc: "Custom code actions in workflows", stat: "12 custom actions", detail: "Executions this month: 8,734 | Avg. runtime: 1.2s" },
+      { name: "Data Quality", desc: "Automated data cleansing", stat: "98.7% data quality score", detail: "Duplicates merged: 234 | Formatting fixes: 1,892" },
+      { name: "Datasets", desc: "Custom data collections for reporting", stat: "8 datasets configured", detail: "Powering 23 custom reports | Last refresh: 15 min ago" },
+      { name: "Custom Reports", desc: "Advanced analytics builder", stat: "45 custom reports", detail: "Most viewed: Revenue Attribution | Shared with: 12 users" },
+    ],
+  },
+];
+
+const CONTACTS = [
+  { name: "Marcus Reynolds", company: "Nexora Technologies", email: "marcus@nexora.io", status: "Customer", score: 92 },
+  { name: "Diana Okafor", company: "Veltrix Solutions", email: "dokafor@veltrix.com", status: "Lead", score: 67 },
+  { name: "Yuki Tanaka", company: "Stratosphere AI", email: "yuki@stratosphere.ai", status: "Customer", score: 95 },
+  { name: "Leo Dubois", company: "Pulsewave Media", email: "leo@pulsewave.co", status: "MQL", score: 43 },
+  { name: "Raj Mehta", company: "Horizon Dynamics", email: "raj.mehta@horizondyn.com", status: "SQL", score: 78 },
+  { name: "Nina Vasquez", company: "Codecraft Studio", email: "nina@codecraft.studio", status: "Lead", score: 55 },
+  { name: "Chen Wei", company: "DataForge Inc.", email: "chen.wei@dataforge.com", status: "Customer", score: 88 },
+  { name: "Fatima Al-Rashid", company: "Zenith Capital", email: "fatima@zenithcap.com", status: "MQL", score: 51 },
+];
+
+// ─── RESPONSIVE HOOK ─────────────────────────────────────────────
+function useResponsive() {
+  const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return { isMobile: width < 768, isTablet: width >= 768 && width < 1024, isDesktop: width >= 1024, width };
+}
+
+// ─── 3D SCENE (OPTIMIZED) ────────────────────────────────────────
+function ThreeDScene({ compact = false }) {
+  const mountRef = useRef(null);
+  useEffect(() => {
+    if (!mountRef.current) return;
+    const container = mountRef.current;
+    const w = container.clientWidth; const h = container.clientHeight;
+    if (w === 0 || h === 0) return;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(compact ? 55 : 50, w / h, 0.1, 1000);
+    camera.position.set(0, 2, compact ? 9 : 8); camera.lookAt(0, 0, 0);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(w, h); renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); renderer.setClearColor(0x000000, 0);
+    container.appendChild(renderer.domElement);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+    const pl1 = new THREE.PointLight(0xff7a59, 2, 20); pl1.position.set(3, 4, 3); scene.add(pl1);
+    const pl2 = new THREE.PointLight(0x00bda5, 1.5, 20); pl2.position.set(-3, 2, -3); scene.add(pl2);
+    const group = new THREE.Group(); scene.add(group);
+    const ringColors = [0x0091ae, 0x00bda5, 0xff7a59, 0xff5c35, 0x00bda5];
+    const funnelRings = [];
+    for (let i = 0; i < 5; i++) {
+      const geo = new THREE.TorusGeometry(2.5 - i * 0.35, 0.08, 16, 64);
+      const mat = new THREE.MeshPhysicalMaterial({ color: ringColors[i], metalness: 0.7, roughness: 0.2, transparent: true, opacity: 0.85, emissive: ringColors[i], emissiveIntensity: 0.3 });
+      const ring = new THREE.Mesh(geo, mat); ring.position.y = 1.5 - i * 0.75; ring.rotation.x = Math.PI / 2;
+      group.add(ring); funnelRings.push(ring);
+    }
+    const pCount = compact ? 100 : 200;
+    const pGeo = new THREE.BufferGeometry();
+    const pos = new Float32Array(pCount * 3); const cols = new Float32Array(pCount * 3); const vels = [];
+    for (let i = 0; i < pCount; i++) {
+      const a = Math.random() * Math.PI * 2; const r = 0.5 + Math.random() * 3;
+      pos[i*3] = Math.cos(a)*r; pos[i*3+1] = 3 - Math.random()*5; pos[i*3+2] = Math.sin(a)*r;
+      const c = new THREE.Color(ringColors[Math.floor(Math.random()*ringColors.length)]);
+      cols[i*3]=c.r; cols[i*3+1]=c.g; cols[i*3+2]=c.b;
+      vels.push({vx:(Math.random()-0.5)*0.01, vy:-0.005-Math.random()*0.01, vz:(Math.random()-0.5)*0.01});
+    }
+    pGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    pGeo.setAttribute("color", new THREE.BufferAttribute(cols, 3));
+    const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({size:0.04, vertexColors:true, transparent:true, opacity:0.8, blending:THREE.AdditiveBlending}));
+    group.add(particles);
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.4,32,32), new THREE.MeshPhysicalMaterial({color:0xff7a59,metalness:0.9,roughness:0.1,transparent:true,opacity:0.6,emissive:0xff7a59,emissiveIntensity:0.8}));
+    sphere.position.y = -1.8; group.add(sphere);
+    let animId; const clock = new THREE.Clock();
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+      group.rotation.y = t * 0.15;
+      funnelRings.forEach((ring,i) => { ring.rotation.z = t*(0.2+i*0.05); ring.position.y = (1.5-i*0.75)+Math.sin(t*0.8+i*0.5)*0.08; ring.material.emissiveIntensity = 0.3+Math.sin(t*2+i)*0.15; });
+      const p = particles.geometry.attributes.position.array;
+      for (let i=0;i<pCount;i++) {
+        p[i*3]+=vels[i].vx; p[i*3+1]+=vels[i].vy; p[i*3+2]+=vels[i].vz;
+        if (p[i*3+1]<-3) { const a=Math.random()*Math.PI*2; const r=1+Math.random()*2.5; p[i*3]=Math.cos(a)*r; p[i*3+1]=3; p[i*3+2]=Math.sin(a)*r; }
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+      sphere.scale.setScalar(1+Math.sin(t*3)*0.1); sphere.material.emissiveIntensity = 0.8+Math.sin(t*2)*0.3;
+      pl1.position.x = Math.cos(t*0.5)*4; pl1.position.z = Math.sin(t*0.5)*4;
+      renderer.render(scene, camera);
+    };
+    animate();
+    const onResize = () => { const nw=container.clientWidth; const nh=container.clientHeight; if(!nw||!nh)return; camera.aspect=nw/nh; camera.updateProjectionMatrix(); renderer.setSize(nw,nh); };
+    window.addEventListener("resize", onResize);
+    return () => { window.removeEventListener("resize", onResize); cancelAnimationFrame(animId); renderer.dispose(); if(container.contains(renderer.domElement)) container.removeChild(renderer.domElement); };
+  }, [compact]);
+  return <div ref={mountRef} style={{width:"100%",height:"100%",position:"absolute",top:0,left:0}} />;
+}
+
+// ─── SVG CHARTS ──────────────────────────────────────────────────
+function Sparkline({ data, color = HUBSPOT_ORANGE, width = 120, height = 40 }) {
+  const max=Math.max(...data); const min=Math.min(...data); const range=max-min||1;
+  const pts = data.map((v,i)=>`${(i/(data.length-1))*width},${height-((v-min)/range)*height}`).join(" ");
+  const gid = `g-${color.replace("#","")}-${Math.random().toString(36).slice(2,6)}`;
+  return (
+    <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
+      <defs><linearGradient id={gid} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={color} stopOpacity="0.3"/><stop offset="100%" stopColor={color} stopOpacity="0"/></linearGradient></defs>
+      <polygon points={`0,${height} ${pts} ${width},${height}`} fill={`url(#${gid})`}/>
+      <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function BarChart({ data, width=500, height=200 }) {
+  const maxVal = Math.max(...data.map(d=>Math.max(d.leads,d.deals*5,d.revenue)));
+  const bW = width/data.length;
+  return (
+    <svg width="100%" height={height} viewBox={`0 0 ${width} ${height+30}`} preserveAspectRatio="xMidYMid meet">
+      {data.map((d,i) => { const x=i*bW+bW*0.1; const b=bW*0.25; return (
+        <g key={i}>
+          <rect x={x} y={height-(d.leads/maxVal)*height} width={b} height={(d.leads/maxVal)*height} fill={ACCENT_BLUE} opacity="0.8" rx="2"/>
+          <rect x={x+b+2} y={height-((d.deals*5)/maxVal)*height} width={b} height={((d.deals*5)/maxVal)*height} fill={HUBSPOT_ORANGE} opacity="0.8" rx="2"/>
+          <rect x={x+(b+2)*2} y={height-(d.revenue/maxVal)*height} width={b} height={(d.revenue/maxVal)*height} fill={ACCENT_TEAL} opacity="0.8" rx="2"/>
+          <text x={x+bW*0.35} y={height+18} textAnchor="middle" fill="#64748b" fontSize="11" fontFamily="inherit">{d.month}</text>
+        </g>
+      );})}
+    </svg>
+  );
+}
+
+// ─── NAV ─────────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  { key:"overview", label:"Overview", icon:"◉" },
+  { key:"pipeline", label:"Pipeline", icon:"◈" },
+  { key:"hubs", label:"Hubs", icon:"⬡" },
+  { key:"workflows", label:"Workflows", icon:"⟐" },
+  { key:"integrations", label:"Integrations", icon:"⊞" },
+  { key:"contacts", label:"Contacts", icon:"◎" },
+];
+
+// ─── BACK BUTTON ─────────────────────────────────────────────────
+function BackButton({ onClick, label = "Back" }) {
+  return (
+    <button onClick={onClick} style={{
+      display:"inline-flex",alignItems:"center",gap:8,padding:"8px 16px",borderRadius:10,
+      background:GLASS,border:"1px solid rgba(255,255,255,0.08)",color:"#94a3b8",fontSize:13,
+      fontWeight:600,cursor:"pointer",transition:"all 0.2s",marginBottom:20,fontFamily:"inherit",
+    }}
+    onMouseEnter={e=>{e.target.style.background=`${HUBSPOT_ORANGE}15`;e.target.style.color=HUBSPOT_ORANGE;e.target.style.borderColor=`${HUBSPOT_ORANGE}40`}}
+    onMouseLeave={e=>{e.target.style.background=GLASS;e.target.style.color="#94a3b8";e.target.style.borderColor="rgba(255,255,255,0.08)"}}
+    >← {label}</button>
+  );
+}
+
+// ─── DEAL DETAIL VIEW (HUBSPOT-STYLE) ───────────────────────────
+function DealDetailView({ deal, onBack, isMobile }) {
+  const [activeTab, setActiveTab] = useState("activity");
+  const stageColor = (s) => ({"Awareness":ACCENT_BLUE,"Consideration":ACCENT_TEAL,"Decision":HUBSPOT_ORANGE,"Negotiation":HUBSPOT_CORAL,"Closed Won":"#22C55E"}[s]||"#64748b");
+  const stageIndex = ["Awareness","Consideration","Decision","Negotiation","Closed Won"].indexOf(deal.stage);
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const activityIcon = (type) => ({email:"✉️",call:"📞",meeting:"📅",note:"📝",task:"✅"}[type]||"•");
+  const activityColor = (type) => ({email:ACCENT_BLUE,call:ACCENT_TEAL,meeting:HUBSPOT_ORANGE,note:"#A78BFA",task:"#22C55E"}[type]||"#64748b");
+
+  const stages = ["Awareness","Consideration","Decision","Negotiation","Closed Won"];
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to deals" />
+
+      {/* DEAL HEADER */}
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${stageColor(deal.stage)},${stageColor(deal.stage)}66)`}}/>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:16,paddingTop:8}}>
+          <div>
+            <div style={{fontSize:11,color:"#64748b",fontFamily:"'JetBrains Mono', monospace",marginBottom:4}}>{deal.id}</div>
+            <div style={{fontSize:isMobile?22:28,fontWeight:800,color:"#fff",letterSpacing:"-0.5px"}}>{deal.company}</div>
+            <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>{deal.contact} · {deal.domain}</div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{fontSize:isMobile?28:36,fontWeight:800,color:"#fff",fontFamily:"'JetBrains Mono', monospace"}}>{deal.value}</div>
+            <div style={{display:"inline-flex",alignItems:"center",gap:6,padding:"5px 14px",borderRadius:20,fontSize:12,fontWeight:600,background:`${stageColor(deal.stage)}15`,color:stageColor(deal.stage),border:`1px solid ${stageColor(deal.stage)}30`,marginTop:4}}>
+              <span style={{width:7,height:7,borderRadius:"50%",background:stageColor(deal.stage),boxShadow:`0 0 8px ${stageColor(deal.stage)}60`}}/>{deal.stage}
+            </div>
+          </div>
+        </div>
+
+        {/* STAGE PROGRESS BAR */}
+        <div style={{marginTop:24,display:"flex",alignItems:"center",gap:0}}>
+          {stages.map((s,i) => (
+            <div key={s} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center"}}>
+              <div style={{width:"100%",display:"flex",alignItems:"center"}}>
+                <div style={{flex:1,height:4,background:i<=stageIndex?stageColor(deal.stage):"rgba(255,255,255,0.08)",borderRadius:i===0?"4px 0 0 4px":i===4?"0 4px 4px 0":"0",transition:"background 0.4s"}}/>
+              </div>
+              <div style={{fontSize:10,color:i<=stageIndex?stageColor(deal.stage):"#475569",fontWeight:i===stageIndex?700:400,marginTop:6,textAlign:"center",whiteSpace:"nowrap"}}>{isMobile?(s.slice(0,4)+"."): s}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* PROPERTIES + SIDEBAR GRID */}
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"2fr 1fr",gap:16,marginBottom:20}}>
+        {/* LEFT: TABS AREA */}
+        <div>
+          {/* TAB BAR */}
+          <div style={{display:"flex",gap:0,marginBottom:16,background:"rgba(255,255,255,0.03)",borderRadius:12,padding:4,border:"1px solid rgba(255,255,255,0.06)"}}>
+            {[{key:"activity",label:"Activity"},{key:"notes",label:"Notes"},{key:"emails",label:"Emails"}].map(t=>(
+              <button key={t.key} onClick={()=>setActiveTab(t.key)} style={{
+                flex:1,padding:"10px 0",borderRadius:10,border:"none",fontSize:13,fontWeight:600,cursor:"pointer",
+                fontFamily:"inherit",transition:"all 0.2s",
+                background:activeTab===t.key?`${HUBSPOT_ORANGE}15`:"transparent",
+                color:activeTab===t.key?HUBSPOT_ORANGE:"#64748b",
+              }}>{t.label}</button>
+            ))}
+          </div>
+
+          {/* ACTIVITY TIMELINE */}
+          {activeTab === "activity" && (
+            <div style={crd}>
+              <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:20}}>Activity Timeline</div>
+              {deal.activities.map((act,i) => (
+                <div key={i} style={{display:"flex",gap:14,marginBottom:i<deal.activities.length-1?0:0,paddingBottom:i<deal.activities.length-1?20:0,borderLeft:i<deal.activities.length-1?`2px solid ${activityColor(act.type)}20`:"2px solid transparent",marginLeft:14,paddingLeft:20,position:"relative"}}>
+                  <div style={{position:"absolute",left:-11,top:0,width:22,height:22,borderRadius:"50%",background:`${activityColor(act.type)}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,border:`2px solid ${activityColor(act.type)}40`}}>{activityIcon(act.type)}</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:600,color:"#E2E8F0",marginBottom:4}}>{act.title}</div>
+                    <div style={{display:"flex",gap:12,fontSize:11,color:"#64748b",flexWrap:"wrap"}}>
+                      <span>{act.date} at {act.time}</span>
+                      <span style={{color:"#94a3b8"}}>by {act.user}</span>
+                      {act.duration && <span style={{color:ACCENT_TEAL}}>⏱ {act.duration}</span>}
+                      {act.status && <span style={{padding:"1px 8px",borderRadius:10,fontSize:10,fontWeight:600,background:act.status==="completed"?"rgba(34,197,94,0.1)":"rgba(255,122,89,0.1)",color:act.status==="completed"?"#22C55E":HUBSPOT_ORANGE}}>{act.status}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === "notes" && (
+            <div style={crd}>
+              <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:12}}>Deal Notes</div>
+              <div style={{padding:16,background:"rgba(167,139,250,0.06)",borderRadius:10,border:"1px solid rgba(167,139,250,0.15)",fontSize:13,color:"#CBD5E1",lineHeight:1.8}}>{deal.notes}</div>
+              <div style={{marginTop:16}}>
+                <div style={{fontSize:12,color:"#64748b",marginBottom:8}}>Key properties noted:</div>
+                {deal.activities.filter(a=>a.type==="note").map((n,i)=>(
+                  <div key={i} style={{padding:12,background:GLASS,borderRadius:8,marginBottom:8,fontSize:12,color:"#94a3b8",border:"1px solid rgba(255,255,255,0.04)"}}>
+                    <div style={{fontWeight:600,color:"#E2E8F0",marginBottom:4}}>📝 {n.date}</div>
+                    {n.title}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "emails" && (
+            <div style={crd}>
+              <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:12}}>Email History</div>
+              {deal.activities.filter(a=>a.type==="email").map((em,i)=>(
+                <div key={i} style={{padding:14,background:GLASS,borderRadius:10,marginBottom:10,border:"1px solid rgba(255,255,255,0.04)",cursor:"pointer",transition:"all 0.2s"}}
+                  onMouseEnter={e=>e.currentTarget.style.borderColor=`${ACCENT_BLUE}40`}
+                  onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,0.04)"}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,flexWrap:"wrap",gap:4}}>
+                    <span style={{fontSize:13,fontWeight:600,color:"#E2E8F0"}}>✉️ {em.title}</span>
+                    <span style={{fontSize:11,color:"#64748b"}}>{em.date}</span>
+                  </div>
+                  <div style={{fontSize:11,color:"#64748b"}}>Sent by {em.user} at {em.time}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* RIGHT SIDEBAR: DEAL PROPERTIES */}
+        <div>
+          <div style={{...crd,marginBottom:16}}>
+            <div style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:16}}>Deal Information</div>
+            {[
+              ["Deal Owner", deal.owner],
+              ["Deal Type", deal.type],
+              ["Pipeline", "Sales Pipeline"],
+              ["Close Date", deal.closeDate],
+              ["Create Date", deal.createDate],
+              ["Lead Source", deal.source],
+            ].map(([label,val],i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:i<5?"1px solid rgba(255,255,255,0.04)":"none",fontSize:12}}>
+                <span style={{color:"#64748b"}}>{label}</span>
+                <span style={{color:"#E2E8F0",fontWeight:500,textAlign:"right",maxWidth:"60%"}}>{val}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={{...crd,marginBottom:16}}>
+            <div style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:16}}>Contact Details</div>
+            <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+              <div style={{width:40,height:40,borderRadius:"50%",background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,color:"#fff"}}>{deal.contact.charAt(0)}</div>
+              <div>
+                <div style={{fontSize:14,fontWeight:600,color:"#fff"}}>{deal.contact}</div>
+                <div style={{fontSize:11,color:"#64748b"}}>{deal.company}</div>
+              </div>
+            </div>
+            {[
+              ["Email", deal.email],
+              ["Phone", deal.phone],
+              ["Domain", deal.domain],
+            ].map(([label,val],i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:i<2?"1px solid rgba(255,255,255,0.04)":"none",fontSize:12}}>
+                <span style={{color:"#64748b"}}>{label}</span>
+                <span style={{color:ACCENT_BLUE,fontWeight:500}}>{val}</span>
+              </div>
+            ))}
+          </div>
+
+          <div style={crd}>
+            <div style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:16}}>Company Properties</div>
+            {Object.entries(deal.properties).map(([key,val],i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:i<Object.entries(deal.properties).length-1?"1px solid rgba(255,255,255,0.04)":"none",fontSize:12}}>
+                <span style={{color:"#64748b",textTransform:"capitalize"}}>{key.replace(/([A-Z])/g,' $1')}</span>
+                <span style={{color:"#E2E8F0",fontWeight:500,textAlign:"right"}}>{val}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── WORKFLOW DETAIL VIEW ────────────────────────────────────────
+function WorkflowDetailView({ workflow, onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const stepColor = (type) => ({trigger:"#EF4444",delay:"#F59E0B",email:ACCENT_BLUE,branch:"#A78BFA",action:ACCENT_TEAL}[type]||"#64748b");
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to workflows" />
+
+      {/* HEADER */}
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${HUBSPOT_ORANGE},${ACCENT_TEAL})`}}/>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:16,paddingTop:8}}>
+          <div style={{flex:1}}>
+            <div style={{fontSize:11,color:"#64748b",fontFamily:"'JetBrains Mono', monospace",marginBottom:4}}>{workflow.id}</div>
+            <div style={{fontSize:isMobile?20:24,fontWeight:800,color:"#fff"}}>{workflow.name}</div>
+            <div style={{fontSize:13,color:"#94a3b8",marginTop:6,lineHeight:1.6}}>{workflow.description}</div>
+          </div>
+          <span style={{display:"inline-flex",alignItems:"center",gap:5,padding:"6px 16px",borderRadius:20,fontSize:12,fontWeight:700,background:workflow.status==="active"?"rgba(34,197,94,0.12)":"rgba(245,158,11,0.12)",color:workflow.status==="active"?"#22C55E":"#F59E0B",border:`1px solid ${workflow.status==="active"?"#22C55E30":"#F59E0B30"}`}}>
+            <span style={{width:8,height:8,borderRadius:"50%",background:workflow.status==="active"?"#22C55E":"#F59E0B",boxShadow:`0 0 8px ${workflow.status==="active"?"#22C55E":"#F59E0B"}60`}}/>{workflow.status.toUpperCase()}
+          </span>
+        </div>
+        <div style={{display:"flex",gap:20,marginTop:16,flexWrap:"wrap",fontSize:12,color:"#64748b"}}>
+          <span>Trigger: <span style={{color:HUBSPOT_ORANGE,fontWeight:600}}>{workflow.trigger}</span></span>
+          <span>Goal: <span style={{color:ACCENT_TEAL,fontWeight:600}}>{workflow.goalCriteria}</span></span>
+        </div>
+      </div>
+
+      {/* STATS ROW */}
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Enrollment Rate",value:`${workflow.performance.enrollmentRate}%`,color:ACCENT_BLUE},
+          {label:"Completion Rate",value:`${workflow.performance.completionRate}%`,color:ACCENT_TEAL},
+          {label:"Conversion Rate",value:`${workflow.performance.conversionRate}%`,color:HUBSPOT_ORANGE},
+          {label:"Avg. Time",value:workflow.performance.avgTimeToComplete,color:"#A78BFA"},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:isMobile?20:26,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* VISUAL WORKFLOW BUILDER */}
+      <div style={{...crd,marginBottom:20}}>
+        <div style={{fontSize:16,fontWeight:700,color:"#fff",marginBottom:24}}>Workflow Steps</div>
+        <div style={{position:"relative"}}>
+          {workflow.steps.map((step,i)=>(
+            <div key={step.id} style={{display:"flex",alignItems:"flex-start",marginBottom:i<workflow.steps.length-1?0:0}}>
+              {/* CONNECTOR LINE */}
+              <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:40,flexShrink:0}}>
+                <div style={{width:32,height:32,borderRadius:step.type==="branch"?8:"50%",background:`${stepColor(step.type)}18`,border:`2px solid ${stepColor(step.type)}50`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,zIndex:2}}>{step.icon}</div>
+                {i<workflow.steps.length-1 && <div style={{width:2,height:isMobile?50:40,background:`linear-gradient(${stepColor(step.type)}40, ${stepColor(workflow.steps[i+1].type)}40)`}}/>}
+              </div>
+              {/* STEP CONTENT */}
+              <div style={{flex:1,marginLeft:12,paddingBottom:i<workflow.steps.length-1?(isMobile?18:8):0}}>
+                <div style={{padding:"12px 16px",borderRadius:10,background:GLASS,border:`1px solid ${stepColor(step.type)}20`,transition:"all 0.2s"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+                    <div>
+                      <div style={{fontSize:13,fontWeight:700,color:"#E2E8F0"}}>{step.label}</div>
+                      <div style={{fontSize:11,color:"#64748b",marginTop:2}}>{step.desc}</div>
+                    </div>
+                    <span style={{fontSize:10,padding:"2px 10px",borderRadius:20,background:`${stepColor(step.type)}15`,color:stepColor(step.type),fontWeight:600,textTransform:"uppercase"}}>{step.type}</span>
+                  </div>
+                  {step.stats && (
+                    <div style={{display:"flex",gap:isMobile?8:16,marginTop:10,flexWrap:"wrap"}}>
+                      {[["Sent",step.stats.sent],["Opened",step.stats.opened],["Clicked",step.stats.clicked],["Open Rate",step.stats.rate]].map(([l,v],j)=>(
+                        <div key={j} style={{fontSize:11}}>
+                          <span style={{color:"#64748b"}}>{l}: </span>
+                          <span style={{color:"#E2E8F0",fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{typeof v==="number"?v.toLocaleString():v}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {step.type==="branch" && (
+                    <div style={{display:"flex",gap:12,marginTop:10}}>
+                      <div style={{padding:"4px 10px",borderRadius:6,fontSize:11,background:"rgba(34,197,94,0.1)",color:"#22C55E",border:"1px solid #22C55E20"}}>✓ Yes → {step.yesPath}</div>
+                      <div style={{padding:"4px 10px",borderRadius:6,fontSize:11,background:"rgba(239,68,68,0.1)",color:"#EF4444",border:"1px solid #EF444420"}}>✗ No → {step.noPath}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* METADATA */}
+      <div style={{...crd}}>
+        <div style={{display:"flex",gap:20,fontSize:12,color:"#64748b",flexWrap:"wrap"}}>
+          <span>Created by: <span style={{color:"#E2E8F0",fontWeight:500}}>{workflow.createdBy}</span></span>
+          <span>Last modified: <span style={{color:"#E2E8F0",fontWeight:500}}>{workflow.lastModified}</span></span>
+          <span>Enrolled: <span style={{color:ACCENT_TEAL,fontWeight:600}}>{workflow.enrolled.toLocaleString()}</span></span>
+          <span>Completed: <span style={{color:"#22C55E",fontWeight:600}}>{workflow.completed.toLocaleString()}</span></span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── INTEGRATION DETAIL VIEW ─────────────────────────────────────
+function IntegrationDetailView({ integration, onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const sc = integration.status==="connected"?"#22C55E":integration.status==="warning"?"#F59E0B":"#EF4444";
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to integrations" />
+
+      {/* HEADER */}
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${integration.color},${integration.color}66)`}}/>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:16,paddingTop:8}}>
+          <div style={{display:"flex",alignItems:"center",gap:16}}>
+            <div style={{width:48,height:48,borderRadius:14,background:`${integration.color}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,border:`2px solid ${integration.color}40`}}>{integration.icon}</div>
+            <div>
+              <div style={{fontSize:isMobile?20:24,fontWeight:800,color:"#fff"}}>{integration.name}</div>
+              <div style={{fontSize:13,color:"#94a3b8",marginTop:4}}>{integration.description}</div>
+            </div>
+          </div>
+          <span style={{display:"inline-flex",alignItems:"center",gap:6,padding:"6px 16px",borderRadius:20,fontSize:12,fontWeight:700,background:`${sc}12`,color:sc,border:`1px solid ${sc}30`}}>
+            <span style={{width:8,height:8,borderRadius:"50%",background:sc,boxShadow:`0 0 8px ${sc}60`}}/>{integration.status.toUpperCase()}
+          </span>
+        </div>
+      </div>
+
+      {/* STATS ROW */}
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        {[
+          {label:"Total Records",value:integration.stats.totalSynced,color:ACCENT_BLUE},
+          {label:"Errors",value:integration.stats.errors.toString(),color:integration.stats.errors>0?"#EF4444":"#22C55E"},
+          {label:"Last Full Sync",value:integration.stats.lastFullSync,color:ACCENT_TEAL},
+          {label:"Frequency",value:integration.stats.syncFrequency,color:HUBSPOT_ORANGE},
+        ].map((s,i)=>(
+          <div key={i} style={{...crd,textAlign:"center"}}>
+            <div style={{fontSize:isMobile?18:22,fontWeight:800,color:s.color,fontFamily:"'JetBrains Mono', monospace"}}>{s.value}</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:16}}>
+        {/* SYNC HISTORY */}
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Sync History</div>
+          {integration.syncHistory.map((s,i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0",borderBottom:i<integration.syncHistory.length-1?"1px solid rgba(255,255,255,0.04)":"none"}}>
+              <div>
+                <div style={{fontSize:13,fontWeight:600,color:"#E2E8F0"}}>{s.action}</div>
+                <div style={{fontSize:11,color:"#64748b",marginTop:2}}>{s.time}</div>
+              </div>
+              <span style={{width:8,height:8,borderRadius:"50%",background:s.status==="success"?"#22C55E":s.status==="warning"?"#F59E0B":"#EF4444",boxShadow:`0 0 8px ${s.status==="success"?"#22C55E":s.status==="warning"?"#F59E0B":"#EF4444"}40`}}/>
+            </div>
+          ))}
+        </div>
+
+        {/* FIELD MAPPINGS */}
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Field Mappings</div>
+          {integration.fieldMappings.length > 0 ? integration.fieldMappings.map((fm,i)=>(
+            <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 0",borderBottom:i<integration.fieldMappings.length-1?"1px solid rgba(255,255,255,0.04)":"none",fontSize:12}}>
+              <span style={{flex:1,color:ACCENT_BLUE,fontWeight:600,fontFamily:"'JetBrains Mono', monospace",fontSize:11}}>{fm.hs}</span>
+              <span style={{color:"#64748b",fontSize:16}}>
+                {fm.direction==="bi"?"⇄":fm.direction.includes("→")?"→":"←"}
+              </span>
+              <span style={{flex:1,color:ACCENT_TEAL,fontWeight:600,fontFamily:"'JetBrains Mono', monospace",fontSize:11,textAlign:"right"}}>{fm.sf}</span>
+            </div>
+          )) : (
+            <div style={{fontSize:13,color:"#64748b",textAlign:"center",padding:20}}>No active field mappings. Connect integration to configure.</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── HUB DETAIL VIEW ─────────────────────────────────────────────
+function HubDetailView({ hub, onBack, isMobile }) {
+  const [selectedFeature, setSelectedFeature] = useState(null);
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to hubs" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${hub.color},${hub.color}66)`}}/>
+        <div style={{display:"flex",alignItems:"center",gap:16,paddingTop:8}}>
+          <div style={{fontSize:40}}>{hub.icon}</div>
+          <div>
+            <div style={{fontSize:isMobile?22:28,fontWeight:800,color:"#fff"}}>{hub.name}</div>
+            <div style={{fontSize:13,color:hub.color,fontWeight:600}}>Enterprise Edition · Fully Configured</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(auto-fill, minmax(280px, 1fr))",gap:14}}>
+        {hub.features.map((f,i)=>(
+          <div key={i} onClick={()=>setSelectedFeature(selectedFeature===i?null:i)} style={{
+            ...crd,cursor:"pointer",
+            borderColor:selectedFeature===i?`${hub.color}40`:"rgba(255,255,255,0.06)",
+            boxShadow:selectedFeature===i?`0 0 20px ${hub.color}15`:"none",
+            transition:"all 0.3s",
+          }}>
+            <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:6}}>{f.name}</div>
+            <div style={{fontSize:12,color:"#94a3b8",marginBottom:10,lineHeight:1.6}}>{f.desc}</div>
+            <div style={{padding:"8px 12px",background:`${hub.color}08`,borderRadius:8,border:`1px solid ${hub.color}15`,fontSize:12,color:hub.color,fontWeight:600}}>{f.stat}</div>
+            {selectedFeature===i && (
+              <div style={{marginTop:14,padding:"12px 14px",background:"rgba(255,255,255,0.03)",borderRadius:10,border:"1px solid rgba(255,255,255,0.06)",fontSize:12,color:"#CBD5E1",lineHeight:1.7,animation:"fadeSlideIn 0.3s ease"}}>
+                <div style={{fontSize:11,color:"#64748b",fontWeight:600,marginBottom:6,textTransform:"uppercase",letterSpacing:"0.05em"}}>Performance Details</div>
+                {f.detail}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── CONTACT DETAIL VIEW ─────────────────────────────────────────
+function ContactDetailView({ contact, onBack, isMobile }) {
+  const crd = {background:BG_CARD,borderRadius:14,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)"};
+  const statusColor = {Customer:"#22C55E",Lead:ACCENT_BLUE,MQL:HUBSPOT_ORANGE,SQL:ACCENT_TEAL}[contact.status]||"#64748b";
+  const deal = RECENT_DEALS.find(d=>d.contact===contact.name);
+
+  return (
+    <div style={{animation:"fadeSlideIn 0.4s ease"}}>
+      <style>{`@keyframes fadeSlideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }`}</style>
+      <BackButton onClick={onBack} label="Back to contacts" />
+
+      <div style={{...crd,marginBottom:20,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,height:4,background:`linear-gradient(90deg,${statusColor},${statusColor}66)`}}/>
+        <div style={{display:"flex",alignItems:"center",gap:20,paddingTop:8}}>
+          <div style={{width:64,height:64,borderRadius:"50%",background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,fontWeight:800,color:"#fff",flexShrink:0}}>{contact.name.charAt(0)}</div>
+          <div>
+            <div style={{fontSize:isMobile?22:28,fontWeight:800,color:"#fff"}}>{contact.name}</div>
+            <div style={{fontSize:14,color:"#94a3b8",marginTop:4}}>{contact.company}</div>
+            <div style={{display:"flex",gap:10,marginTop:8,flexWrap:"wrap"}}>
+              <span style={{padding:"4px 12px",borderRadius:20,fontSize:11,fontWeight:600,background:`${statusColor}15`,color:statusColor,border:`1px solid ${statusColor}30`}}>{contact.status}</span>
+              <span style={{padding:"4px 12px",borderRadius:20,fontSize:11,fontWeight:600,background:`${ACCENT_BLUE}15`,color:ACCENT_BLUE}}>Score: {contact.score}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:16}}>
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Contact Properties</div>
+          {[["Email",contact.email],["Company",contact.company],["Lifecycle",contact.status],["Lead Score",contact.score]].map(([l,v],i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:i<3?"1px solid rgba(255,255,255,0.04)":"none",fontSize:13}}>
+              <span style={{color:"#64748b"}}>{l}</span>
+              <span style={{color:"#E2E8F0",fontWeight:500}}>{v}</span>
+            </div>
+          ))}
+        </div>
+
+        <div style={crd}>
+          <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:16}}>Lead Score Breakdown</div>
+          <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:16}}>
+            <div style={{width:64,height:64,borderRadius:"50%",border:`3px solid ${contact.score>70?ACCENT_TEAL:contact.score>40?HUBSPOT_ORANGE:"#EF4444"}`,display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <span style={{fontSize:22,fontWeight:800,color:"#fff",fontFamily:"'JetBrains Mono', monospace"}}>{contact.score}</span>
+            </div>
+            <div style={{fontSize:12,color:"#94a3b8",lineHeight:1.8}}>
+              {contact.score>70?"Hot lead — ready for sales engagement":contact.score>40?"Warming up — continue nurturing":"Early stage — needs more touchpoints"}
+            </div>
+          </div>
+          <div style={{height:8,background:"rgba(255,255,255,0.06)",borderRadius:4,overflow:"hidden"}}>
+            <div style={{width:`${contact.score}%`,height:"100%",background:`linear-gradient(90deg,${contact.score>70?ACCENT_TEAL:contact.score>40?HUBSPOT_ORANGE:"#EF4444"},${contact.score>70?ACCENT_TEAL:contact.score>40?HUBSPOT_ORANGE:"#EF4444"}aa)`,borderRadius:4,transition:"width 1s"}}/>
+          </div>
+        </div>
+
+        {deal && (
+          <div style={{...crd,gridColumn:isMobile?"1":"1/3"}}>
+            <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:12}}>Associated Deal</div>
+            <div style={{padding:14,background:GLASS,borderRadius:10,border:"1px solid rgba(255,255,255,0.06)"}}>
+              <div style={{display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8}}>
+                <div>
+                  <div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{deal.company}</div>
+                  <div style={{fontSize:12,color:"#64748b",marginTop:4}}>{deal.stage} · {deal.owner}</div>
+                </div>
+                <div style={{fontSize:20,fontWeight:800,color:"#fff",fontFamily:"'JetBrains Mono', monospace"}}>{deal.value}</div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+// ─── MAIN APP ────────────────────────────────────────────────────
+function HubSpotCommandCenter() {
+  const { isMobile, isTablet } = useResponsive();
+  const [activeNav, setActiveNav] = useState("overview");
+  const [time, setTime] = useState(new Date());
+  const [hoveredDeal, setHoveredDeal] = useState(null);
+  const [animIn, setAnimIn] = useState(true);
+
+  // DRILL-DOWN STATE
+  const [selectedDeal, setSelectedDeal] = useState(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState(null);
+  const [selectedIntegration, setSelectedIntegration] = useState(null);
+  const [selectedHub, setSelectedHub] = useState(null);
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [contactSearch, setContactSearch] = useState("");
+
+  useEffect(() => { const t=setInterval(()=>setTime(new Date()),1000); return ()=>clearInterval(t); }, []);
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href = "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap";
+    link.rel = "stylesheet"; document.head.appendChild(link);
+  }, []);
+
+  const switchNav = useCallback((key) => {
+    setAnimIn(false);
+    setTimeout(()=>{
+      setActiveNav(key); setAnimIn(true);
+      setSelectedDeal(null); setSelectedWorkflow(null); setSelectedIntegration(null); setSelectedHub(null); setSelectedContact(null);
+    },200);
+  }, []);
+
+  const stageColor = (s) => ({"Awareness":ACCENT_BLUE,"Consideration":ACCENT_TEAL,"Decision":HUBSPOT_ORANGE,"Negotiation":HUBSPOT_CORAL,"Closed Won":"#22C55E"}[s]||"#64748b");
+  const priorityDot = (p) => ({high:"#EF4444",medium:"#F59E0B",low:"#22C55E"}[p]||"#64748b");
+  const bdg = (color) => ({display:"inline-block",padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:600,background:`${color}18`,color,border:`1px solid ${color}30`});
+  const crd = {background:BG_CARD,borderRadius:isMobile?14:16,border:"1px solid rgba(255,255,255,0.06)",padding:isMobile?"16px":"20px 24px",backdropFilter:"blur(12px)",transition:"all 0.3s ease"};
+  const secAnim = (v) => ({opacity:v?1:0,transform:v?"translateY(0)":"translateY(12px)",transition:"all 0.4s cubic-bezier(0.4,0,0.2,1)"});
+  const thStyle = {textAlign:"left",padding:"8px 12px",fontSize:11,fontWeight:600,color:"#64748b",textTransform:"uppercase",letterSpacing:"0.05em"};
+  const tdStyle = (h) => ({padding:"14px 12px",fontSize:13,background:h?"rgba(255,122,89,0.05)":"transparent",borderTop:"1px solid rgba(255,255,255,0.03)",cursor:"pointer"});
+
+  const TITLES = {overview:"Command Center",pipeline:"Sales Pipeline",hubs:"Hub Explorer",workflows:"Workflow Engine",integrations:"Integrations",contacts:"Contacts"};
+  const SUBS = {overview:"NexaTech Solutions — HubSpot Enterprise Implementation",pipeline:"Deal flow and revenue pipeline management",hubs:"Complete HubSpot ecosystem — all 5 hubs configured",workflows:"Automation and lifecycle management",integrations:"Third-party data sync and API connections",contacts:"Contact database and lead management"};
+
+  // ── OVERVIEW ───────────────────────────────────────────────────
+  const renderOverview = () => (
+    <div style={secAnim(animIn)}>
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":isTablet?"repeat(2,1fr)":"repeat(4,1fr)",gap:isMobile?10:16,marginBottom:isMobile?16:24}}>
+        {METRICS.map((m,i) => (
+          <div key={i} style={{...crd,display:"flex",alignItems:"center",gap:isMobile?10:16,position:"relative",overflow:"hidden"}}>
+            <div style={{fontSize:isMobile?22:28}}>{m.icon}</div>
+            <div style={{minWidth:0}}>
+              <div style={{fontSize:isMobile?10:11,color:"#64748b",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{m.label}</div>
+              <div style={{fontSize:isMobile?18:24,fontWeight:700,color:"#fff"}}>{m.value}</div>
+              <div style={{fontSize:isMobile?11:12,color:m.up?"#22C55E":"#EF4444",fontWeight:600}}>{m.change}{!isMobile&&<span style={{fontSize:10,opacity:0.7}}> vs last month</span>}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:isMobile?12:16,marginBottom:isMobile?16:24}}>
+        <div style={{...crd,position:"relative",height:isMobile?260:380,overflow:"hidden"}}>
+          <div style={{position:"relative",zIndex:2,marginBottom:8}}>
+            <div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff"}}>Pipeline Funnel — Live</div>
+            <div style={{fontSize:11,color:"#64748b"}}>Real-time deal flow visualization</div>
+          </div>
+          <ThreeDScene compact={isMobile}/>
+        </div>
+        <div style={crd}>
+          <div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff",marginBottom:16}}>Deal Pipeline Breakdown</div>
+          {PIPELINE_STAGES.map((s,i) => (
+            <div key={i} style={{marginBottom:14}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,flexWrap:"wrap",gap:4}}>
+                <span style={{fontSize:13,fontWeight:500}}>{s.name}</span>
+                <span style={{fontSize:12,color:"#94a3b8"}}>{s.deals} deals · {s.value}</span>
+              </div>
+              <div style={{height:8,background:"rgba(255,255,255,0.05)",borderRadius:4,overflow:"hidden"}}>
+                <div style={{width:`${s.pct}%`,height:"100%",borderRadius:4,transition:"width 1.2s cubic-bezier(0.4,0,0.2,1)",background:`linear-gradient(90deg,${s.color},${s.color}aa)`,boxShadow:`0 0 12px ${s.color}40`}}/>
+              </div>
+            </div>
+          ))}
+          <div style={{marginTop:16,padding:"12px 14px",background:"rgba(0,189,165,0.08)",borderRadius:10,border:"1px solid rgba(0,189,165,0.15)"}}>
+            <div style={{fontSize:12,color:ACCENT_TEAL,fontWeight:600}}>Win Rate: 10.5%</div>
+            <div style={{fontSize:11,color:"#64748b",marginTop:2}}>89 of 847 opportunities converted this quarter</div>
+          </div>
+        </div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1.2fr 1fr",gap:isMobile?12:16}}>
+        <div style={crd}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,flexWrap:"wrap",gap:8}}>
+            <div><div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff"}}>Performance Trends</div><div style={{fontSize:11,color:"#64748b"}}>Last 7 months</div></div>
+            <div style={{display:"flex",gap:isMobile?8:12,fontSize:11}}><span style={{color:ACCENT_BLUE}}>● Leads</span><span style={{color:HUBSPOT_ORANGE}}>● Deals</span><span style={{color:ACCENT_TEAL}}>● Revenue</span></div>
+          </div>
+          <BarChart data={MONTHLY_DATA} height={isMobile?160:200}/>
+        </div>
+        <div style={crd}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff"}}>Recent Deals</div>
+            <span style={{fontSize:11,color:HUBSPOT_ORANGE,cursor:"pointer",fontWeight:600}} onClick={()=>switchNav("pipeline")}>View all →</span>
+          </div>
+          {RECENT_DEALS.slice(0,4).map((d,i) => (
+            <div key={i}
+              onClick={()=>{setSelectedDeal(d);setActiveNav("pipeline");}}
+              onMouseEnter={()=>setHoveredDeal(i)} onMouseLeave={()=>setHoveredDeal(null)}
+              style={{padding:"12px 14px",borderRadius:10,marginBottom:6,background:hoveredDeal===i?"rgba(255,122,89,0.06)":GLASS,border:"1px solid rgba(255,255,255,0.04)",cursor:"pointer",transition:"all 0.2s"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:4}}>
+                <div style={{minWidth:0}}><div style={{fontSize:13,fontWeight:600,color:"#fff",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{d.company}</div><div style={{fontSize:11,color:"#64748b",marginTop:2}}>{d.owner} · {d.daysInStage}d</div></div>
+                <div style={{textAlign:"right"}}><div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{d.value}</div><span style={bdg(stageColor(d.stage))}>{d.stage}</span></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── PIPELINE ───────────────────────────────────────────────────
+  const renderPipeline = () => {
+    if (selectedDeal) return <DealDetailView deal={selectedDeal} onBack={()=>setSelectedDeal(null)} isMobile={isMobile}/>;
+    return (
+      <div style={secAnim(animIn)}>
+        <div style={{...crd,marginBottom:isMobile?12:24,position:"relative",height:isMobile?240:340,overflow:"hidden"}}>
+          <div style={{position:"relative",zIndex:2,marginBottom:8}}>
+            <div style={{fontSize:isMobile?16:18,fontWeight:700,color:"#fff"}}>3D Sales Funnel</div>
+            <div style={{fontSize:12,color:"#64748b"}}>Interactive pipeline visualization</div>
+          </div>
+          <ThreeDScene compact={isMobile}/>
+        </div>
+        <div style={crd}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+            <div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff"}}>All Active Deals</div>
+            <div style={{fontSize:11,color:"#64748b"}}>Click any deal to open full dashboard</div>
+          </div>
+          {isMobile ? RECENT_DEALS.map((d,i) => (
+            <div key={i} onClick={()=>setSelectedDeal(d)} style={{padding:"14px 16px",borderRadius:12,background:GLASS,border:"1px solid rgba(255,255,255,0.06)",marginBottom:8,cursor:"pointer",transition:"all 0.2s"}}
+              onMouseEnter={e=>e.currentTarget.style.borderColor=`${HUBSPOT_ORANGE}40`}
+              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,0.06)"}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                <div style={{fontSize:14,fontWeight:700,color:"#fff",flex:1,marginRight:8}}>{d.company}</div>
+                <div style={{fontSize:15,fontWeight:800,color:"#fff",fontFamily:"'JetBrains Mono', monospace",whiteSpace:"nowrap"}}>{d.value}</div>
+              </div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:8,alignItems:"center"}}>
+                <span style={bdg(stageColor(d.stage))}>{d.stage}</span>
+                <span style={{display:"inline-flex",alignItems:"center",gap:4,fontSize:12,color:"#94a3b8"}}><span style={{width:6,height:6,borderRadius:"50%",background:priorityDot(d.priority),display:"inline-block"}}/>{d.priority}</span>
+                <span style={{fontSize:11,color:"#64748b"}}>{d.owner}</span>
+              </div>
+            </div>
+          )) : (
+            <div style={{overflowX:"auto"}}>
+              <table style={{width:"100%",borderCollapse:"separate",borderSpacing:"0 4px",minWidth:700}}>
+                <thead><tr>{["Company","Value","Stage","Owner","Priority","Days",""].map(h=><th key={h} style={thStyle}>{h}</th>)}</tr></thead>
+                <tbody>{RECENT_DEALS.map((d,i) => (
+                  <tr key={i} onClick={()=>setSelectedDeal(d)} onMouseEnter={()=>setHoveredDeal(i)} onMouseLeave={()=>setHoveredDeal(null)} style={{cursor:"pointer"}}>
+                    <td style={tdStyle(hoveredDeal===i)}><span style={{fontWeight:600,color:"#fff"}}>{d.company}</span><div style={{fontSize:11,color:"#64748b"}}>{d.id}</div></td>
+                    <td style={tdStyle(hoveredDeal===i)}><span style={{fontWeight:700,color:"#fff",fontFamily:"'JetBrains Mono', monospace"}}>{d.value}</span></td>
+                    <td style={tdStyle(hoveredDeal===i)}><span style={bdg(stageColor(d.stage))}>{d.stage}</span></td>
+                    <td style={tdStyle(hoveredDeal===i)}>{d.owner}</td>
+                    <td style={tdStyle(hoveredDeal===i)}><span style={{display:"inline-flex",alignItems:"center",gap:6}}><span style={{width:7,height:7,borderRadius:"50%",background:priorityDot(d.priority),display:"inline-block",boxShadow:`0 0 6px ${priorityDot(d.priority)}60`}}/><span style={{fontSize:12,textTransform:"capitalize"}}>{d.priority}</span></span></td>
+                    <td style={tdStyle(hoveredDeal===i)}><span style={{fontFamily:"'JetBrains Mono', monospace",fontSize:12}}>{d.daysInStage}d</span></td>
+                    <td style={tdStyle(hoveredDeal===i)}><span style={{color:HUBSPOT_ORANGE,fontSize:12,fontWeight:600}}>Open →</span></td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // ── HUBS ───────────────────────────────────────────────────────
+  const renderHubs = () => {
+    if (selectedHub !== null) return <HubDetailView hub={HUBS_CONFIG[selectedHub]} onBack={()=>setSelectedHub(null)} isMobile={isMobile}/>;
+    return (
+      <div style={secAnim(animIn)}>
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(auto-fit, minmax(280px, 1fr))",gap:isMobile?10:16}}>
+          {HUBS_CONFIG.map((hub,i) => (
+            <div key={i} onClick={()=>setSelectedHub(i)} style={{...crd,cursor:"pointer",position:"relative",overflow:"hidden",transition:"all 0.3s cubic-bezier(0.4,0,0.2,1)"}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=`${hub.color}40`;e.currentTarget.style.boxShadow=`0 0 30px ${hub.color}15`}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";e.currentTarget.style.boxShadow="none"}}>
+              <div style={{position:"relative",zIndex:2}}>
+                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+                  <span style={{fontSize:isMobile?24:28}}>{hub.icon}</span>
+                  <div><div style={{fontSize:isMobile?15:16,fontWeight:700,color:"#fff"}}>{hub.name}</div><div style={{fontSize:11,color:hub.color,fontWeight:600}}>Enterprise</div></div>
+                </div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:14}}>
+                  {hub.features.map((f,j) => (
+                    <span key={j} style={{padding:"4px 10px",borderRadius:6,fontSize:11,fontWeight:500,background:"rgba(255,255,255,0.04)",color:"#94a3b8",border:"1px solid rgba(255,255,255,0.06)"}}>{f.name}</span>
+                  ))}
+                </div>
+                <div style={{fontSize:12,color:hub.color,fontWeight:600}}>Click to explore →</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // ── WORKFLOWS ──────────────────────────────────────────────────
+  const renderWorkflows = () => {
+    if (selectedWorkflow) return <WorkflowDetailView workflow={selectedWorkflow} onBack={()=>setSelectedWorkflow(null)} isMobile={isMobile}/>;
+    return (
+      <div style={secAnim(animIn)}>
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:isMobile?10:16,marginBottom:isMobile?12:24}}>
+          <div style={{...crd,display:"flex",alignItems:"center",gap:12}}>
+            <div style={{width:isMobile?40:50,height:isMobile?40:50,borderRadius:14,background:`${HUBSPOT_ORANGE}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>⟐</div>
+            <div><div style={{fontSize:isMobile?20:24,fontWeight:800,color:"#fff"}}>5</div><div style={{fontSize:11,color:"#64748b",textTransform:"uppercase",letterSpacing:"0.08em"}}>Active Workflows</div></div>
+          </div>
+          <div style={{...crd,display:"flex",alignItems:"center",gap:12}}>
+            <div style={{width:isMobile?40:50,height:isMobile?40:50,borderRadius:14,background:`${ACCENT_TEAL}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>◎</div>
+            <div><div style={{fontSize:isMobile?20:24,fontWeight:800,color:"#fff"}}>4,396</div><div style={{fontSize:11,color:"#64748b",textTransform:"uppercase",letterSpacing:"0.08em"}}>Total Enrolled</div></div>
+          </div>
+        </div>
+        <div style={crd}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+            <div style={{fontSize:isMobile?14:15,fontWeight:600,color:"#fff"}}>Workflow Automation Engine</div>
+            <div style={{fontSize:11,color:"#64748b"}}>Click to open workflow builder</div>
+          </div>
+          {WORKFLOWS_DATA.map((w,i) => {
+            const rate = Math.round((w.completed/w.enrolled)*100);
+            return (
+              <div key={i} onClick={()=>setSelectedWorkflow(w)} style={{
+                padding:"16px 18px",borderRadius:12,background:GLASS,border:"1px solid rgba(255,255,255,0.06)",
+                marginBottom:10,cursor:"pointer",transition:"all 0.2s",
+              }}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=`${HUBSPOT_ORANGE}40`;e.currentTarget.style.background="rgba(255,122,89,0.04)"}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";e.currentTarget.style.background=GLASS}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,flexWrap:"wrap",gap:8}}>
+                  <div>
+                    <div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{w.name}</div>
+                    <div style={{fontSize:11,color:"#64748b",marginTop:2}}>{w.id} · {w.type} workflow</div>
+                  </div>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    <span style={{display:"inline-flex",alignItems:"center",gap:5,padding:"3px 10px",borderRadius:20,fontSize:11,fontWeight:600,background:w.status==="active"?"rgba(34,197,94,0.1)":"rgba(245,158,11,0.1)",color:w.status==="active"?"#22C55E":"#F59E0B",border:`1px solid ${w.status==="active"?"#22C55E30":"#F59E0B30"}`}}>
+                      <span style={{width:6,height:6,borderRadius:"50%",background:w.status==="active"?"#22C55E":"#F59E0B"}}/>{w.status}
+                    </span>
+                    <span style={{color:HUBSPOT_ORANGE,fontSize:12,fontWeight:600}}>Open →</span>
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:isMobile?12:24,fontSize:12,color:"#94a3b8",flexWrap:"wrap"}}>
+                  <span>Enrolled: <span style={{color:"#fff",fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{w.enrolled.toLocaleString()}</span></span>
+                  <span>Completed: <span style={{color:"#fff",fontWeight:600,fontFamily:"'JetBrains Mono', monospace"}}>{w.completed.toLocaleString()}</span></span>
+                  <span style={{display:"flex",alignItems:"center",gap:8}}>
+                    <div style={{width:60,height:5,background:"rgba(255,255,255,0.06)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${rate}%`,height:"100%",background:rate>70?ACCENT_TEAL:HUBSPOT_ORANGE,borderRadius:3}}/></div>
+                    <span style={{fontFamily:"'JetBrains Mono', monospace",fontWeight:600,color:"#fff"}}>{rate}%</span>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // ── INTEGRATIONS ───────────────────────────────────────────────
+  const renderIntegrations = () => {
+    if (selectedIntegration) return <IntegrationDetailView integration={selectedIntegration} onBack={()=>setSelectedIntegration(null)} isMobile={isMobile}/>;
+    return (
+      <div style={secAnim(animIn)}>
+        <div style={{...crd,marginBottom:isMobile?12:24}}>
+          <div style={{fontSize:isMobile?16:18,fontWeight:700,color:"#fff",marginBottom:4}}>Integration Ecosystem</div>
+          <div style={{fontSize:12,color:"#64748b"}}>Click any integration to view sync details, field mappings, and history</div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":isTablet?"1fr 1fr":"repeat(auto-fit, minmax(280px, 1fr))",gap:isMobile?10:16}}>
+          {INTEGRATIONS_DATA.map((intg,i) => {
+            const sc = intg.status==="connected"?"#22C55E":intg.status==="warning"?"#F59E0B":"#EF4444";
+            return (
+              <div key={i} onClick={()=>setSelectedIntegration(intg)} style={{...crd,position:"relative",overflow:"hidden",cursor:"pointer",transition:"all 0.3s"}}
+                onMouseEnter={e=>{e.currentTarget.style.borderColor=`${intg.color}40`;e.currentTarget.style.boxShadow=`0 0 20px ${intg.color}15`}}
+                onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";e.currentTarget.style.boxShadow="none"}}>
+                <div style={{position:"absolute",top:12,right:14}}><span style={{width:8,height:8,borderRadius:"50%",background:sc,display:"inline-block",boxShadow:`0 0 8px ${sc}60`}}/></div>
+                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
+                  <div style={{width:36,height:36,borderRadius:10,background:`${intg.color}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{intg.icon}</div>
+                  <div style={{fontSize:16,fontWeight:700,color:"#fff"}}>{intg.name}</div>
+                </div>
+                {[["Status",<span style={{color:sc,fontWeight:600,textTransform:"capitalize"}}>{intg.status}</span>],["Last Sync",<span style={{color:"#94a3b8",fontFamily:"'JetBrains Mono', monospace"}}>{intg.synced}</span>],["Records",<span style={{color:"#94a3b8",fontFamily:"'JetBrains Mono', monospace"}}>{intg.records}</span>]].map(([l,v],j)=>(
+                  <div key={j} style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:6}}><span style={{color:"#64748b"}}>{l}</span>{v}</div>
+                ))}
+                {intg.status==="connected" && <div style={{marginTop:12}}><Sparkline data={[30,45,38,52,48,65,58,72,68,80]} color={intg.color}/></div>}
+                <div style={{marginTop:10,fontSize:12,color:intg.color,fontWeight:600}}>View details →</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // ── CONTACTS ───────────────────────────────────────────────────
+  const renderContacts = () => {
+    if (selectedContact) return <ContactDetailView contact={selectedContact} onBack={()=>setSelectedContact(null)} isMobile={isMobile}/>;
+    const filtered = CONTACTS.filter(c => c.name.toLowerCase().includes(contactSearch.toLowerCase()) || c.company.toLowerCase().includes(contactSearch.toLowerCase()));
+    const statusColor = (s) => ({Customer:"#22C55E",Lead:ACCENT_BLUE,MQL:HUBSPOT_ORANGE,SQL:ACCENT_TEAL}[s]||"#64748b");
+    return (
+      <div style={secAnim(animIn)}>
+        <div style={{...crd,marginBottom:20}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12,marginBottom:16}}>
+            <div>
+              <div style={{fontSize:isMobile?16:18,fontWeight:700,color:"#fff"}}>Contact Database</div>
+              <div style={{fontSize:12,color:"#64748b"}}>{CONTACTS.length} contacts · Click to view profiles</div>
+            </div>
+          </div>
+          <input
+            type="text" placeholder="Search contacts by name or company..." value={contactSearch} onChange={e=>setContactSearch(e.target.value)}
+            style={{width:"100%",padding:"12px 16px",borderRadius:10,border:"1px solid rgba(255,255,255,0.08)",background:"rgba(255,255,255,0.04)",color:"#E2E8F0",fontSize:13,fontFamily:"inherit",outline:"none",boxSizing:"border-box"}}
+          />
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(auto-fill, minmax(300px, 1fr))",gap:12}}>
+          {filtered.map((c,i)=>(
+            <div key={i} onClick={()=>setSelectedContact(c)} style={{...crd,cursor:"pointer",transition:"all 0.2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=`${HUBSPOT_ORANGE}40`}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.06)"}}>
+              <div style={{display:"flex",alignItems:"center",gap:14}}>
+                <div style={{width:44,height:44,borderRadius:"50%",background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,fontWeight:700,color:"#fff",flexShrink:0}}>{c.name.charAt(0)}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{c.name}</div>
+                  <div style={{fontSize:12,color:"#94a3b8",marginTop:2}}>{c.company}</div>
+                  <div style={{display:"flex",gap:8,marginTop:6,alignItems:"center"}}>
+                    <span style={{padding:"2px 10px",borderRadius:20,fontSize:10,fontWeight:600,background:`${statusColor(c.status)}15`,color:statusColor(c.status),border:`1px solid ${statusColor(c.status)}30`}}>{c.status}</span>
+                    <span style={{fontSize:11,color:"#64748b",fontFamily:"'JetBrains Mono', monospace"}}>Score: {c.score}</span>
+                  </div>
+                </div>
+                <span style={{color:HUBSPOT_ORANGE,fontSize:12,fontWeight:600}}>→</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const SECTIONS = {overview:renderOverview,pipeline:renderPipeline,hubs:renderHubs,workflows:renderWorkflows,integrations:renderIntegrations,contacts:renderContacts};
+
+  // ─── ROOT RENDER ───────────────────────────────────────────────
+  return (
+    <div style={{fontFamily:"'Outfit', 'DM Sans', sans-serif",background:`linear-gradient(145deg, ${BG_DARK} 0%, #0F172A 50%, #0B1120 100%)`,minHeight:"100vh",color:"#E2E8F0",display:"flex",flexDirection:isMobile?"column":"row",position:"relative",overflow:"hidden"}}>
+      <div style={{position:"fixed",inset:0,zIndex:0,pointerEvents:"none",opacity:0.03,backgroundImage:`url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`}}/>
+      {!isMobile && <>
+        <div style={{position:"fixed",width:300,height:300,borderRadius:"50%",background:`radial-gradient(circle,${HUBSPOT_ORANGE}15 0%,transparent 70%)`,left:"60%",top:"10%",pointerEvents:"none",zIndex:0,filter:"blur(40px)"}}/>
+        <div style={{position:"fixed",width:300,height:300,borderRadius:"50%",background:`radial-gradient(circle,${ACCENT_TEAL}15 0%,transparent 70%)`,left:"20%",top:"60%",pointerEvents:"none",zIndex:0,filter:"blur(40px)"}}/>
+        <div style={{position:"fixed",width:300,height:300,borderRadius:"50%",background:`radial-gradient(circle,${ACCENT_BLUE}15 0%,transparent 70%)`,left:"80%",top:"70%",pointerEvents:"none",zIndex:0,filter:"blur(40px)"}}/>
+      </>}
+
+      {/* DESKTOP SIDEBAR */}
+      {!isMobile && (
+        <div style={{width:72,minHeight:"100vh",background:"rgba(15,23,42,0.95)",borderRight:"1px solid rgba(255,255,255,0.06)",display:"flex",flexDirection:"column",alignItems:"center",padding:"20px 0",zIndex:10,position:"relative",backdropFilter:"blur(20px)"}}>
+          <div style={{width:42,height:42,borderRadius:12,background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,fontWeight:900,color:"#fff",marginBottom:32,boxShadow:`0 4px 20px ${HUBSPOT_ORANGE}33`}}>H</div>
+          {NAV_ITEMS.map(n => (
+            <div key={n.key} title={n.label} onClick={()=>switchNav(n.key)} style={{width:44,height:44,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",marginBottom:8,fontSize:18,transition:"all 0.3s cubic-bezier(0.4,0,0.2,1)",background:activeNav===n.key?`${HUBSPOT_ORANGE}15`:"transparent",color:activeNav===n.key?HUBSPOT_ORANGE:"#64748b",border:activeNav===n.key?`1px solid ${HUBSPOT_ORANGE}30`:"1px solid transparent",boxShadow:activeNav===n.key?`0 0 20px ${HUBSPOT_ORANGE}15`:"none"}}>{n.icon}</div>
+          ))}
+          <div style={{marginTop:"auto",display:"flex",flexDirection:"column",alignItems:"center",gap:8}}>
+            <div style={{width:36,height:36,borderRadius:"50%",background:"linear-gradient(135deg,#334155,#1e293b)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,color:HUBSPOT_ORANGE,border:`1px solid ${HUBSPOT_ORANGE}30`}}>R</div>
+            <div style={{fontSize:8,color:"#475569",textAlign:"center",lineHeight:1.2,maxWidth:60}}>Rounak</div>
+          </div>
+        </div>
+      )}
+
+      {/* MOBILE TOP BAR */}
+      {isMobile && (
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 16px",background:"rgba(15,23,42,0.95)",borderBottom:"1px solid rgba(255,255,255,0.06)",zIndex:20,position:"sticky",top:0,backdropFilter:"blur(20px)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div style={{width:34,height:34,borderRadius:10,background:`linear-gradient(135deg,${HUBSPOT_ORANGE},${HUBSPOT_CORAL})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:900,color:"#fff",boxShadow:`0 2px 12px ${HUBSPOT_ORANGE}33`}}>H</div>
+            <div style={{fontSize:16,fontWeight:700,color:"#fff"}}>{TITLES[activeNav]}</div>
+          </div>
+          <div style={{fontSize:11,color:"#64748b",background:GLASS,padding:"6px 10px",borderRadius:8,border:"1px solid rgba(255,255,255,0.06)"}}>{time.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"})}</div>
+        </div>
+      )}
+
+      {/* MAIN CONTENT */}
+      <div style={{flex:1,padding:isMobile?"16px 14px 100px 14px":isTablet?"20px 24px":"24px 32px",overflowY:"auto",position:"relative",zIndex:5,maxHeight:isMobile?"unset":"100vh"}}>
+        {!isMobile && (
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:28}}>
+            <div>
+              <div style={{fontSize:isTablet?22:28,fontWeight:700,letterSpacing:"-0.5px",background:"linear-gradient(135deg,#fff 0%,#94a3b8 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{TITLES[activeNav]}</div>
+              <div style={{fontSize:13,color:"#64748b",marginTop:4}}>{SUBS[activeNav]}</div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:16}}>
+              <div style={{fontSize:13,color:"#64748b",background:GLASS,padding:"8px 16px",borderRadius:10,border:"1px solid rgba(255,255,255,0.06)",backdropFilter:"blur(10px)"}}>{time.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})} · {time.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"})}</div>
+            </div>
+          </div>
+        )}
+        {isMobile && <div style={{fontSize:12,color:"#64748b",marginBottom:14,lineHeight:1.4}}>{SUBS[activeNav]}</div>}
+        {SECTIONS[activeNav]?.()}
+
+        {/* FOOTER WITH CREDITS */}
+        <div style={{marginTop:40,padding:"16px 0",borderTop:"1px solid rgba(255,255,255,0.04)",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+          <div style={{fontSize:11,color:"#334155"}}>
+            Engineered by <span style={{color:HUBSPOT_ORANGE,fontWeight:700}}>Rounak</span> · HubSpot Command Center v2.0
+          </div>
+          <div style={{fontSize:10,color:"#1E293B"}}>NexaTech Solutions · Enterprise CRM Implementation</div>
+        </div>
+      </div>
+
+      {/* MOBILE BOTTOM NAV */}
+      {isMobile && (
+        <div style={{position:"fixed",bottom:0,left:0,right:0,zIndex:30,display:"flex",justifyContent:"space-around",alignItems:"center",padding:"8px 4px 18px 4px",background:"rgba(11,15,26,0.95)",borderTop:"1px solid rgba(255,255,255,0.08)",backdropFilter:"blur(24px)"}}>
+          {NAV_ITEMS.map(n => (
+            <div key={n.key} onClick={()=>switchNav(n.key)} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2,cursor:"pointer",padding:"6px 6px",borderRadius:10,transition:"all 0.2s",background:activeNav===n.key?`${HUBSPOT_ORANGE}12`:"transparent"}}>
+              <span style={{fontSize:16,color:activeNav===n.key?HUBSPOT_ORANGE:"#64748b",transition:"color 0.2s"}}>{n.icon}</span>
+              <span style={{fontSize:8,fontWeight:600,letterSpacing:"0.03em",color:activeNav===n.key?HUBSPOT_ORANGE:"#475569",transition:"color 0.2s"}}>{n.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(HubSpotCommandCenter));
+  </script>
+</body>
+</html>
